@@ -1,0 +1,82 @@
+@extends('layouts.cliente')
+
+@section('title', 'Inicio - Colabs')
+
+
+@section('content')
+    <div class="hero">
+        <div class="hero-text">
+            <h2>Coworking en Barranquilla</h2>
+            <p>En COLABS encuentras oficinas modernas, escritorios compartidos y espacios para reuniones, todo en un
+                ambiente cómodo, colaborativo y con todos los servicios que necesitas.</p>
+            <div class="beneficios">
+                <div>
+                    <h3>¿Necesitas un espacio solo por unas horas?</h3>
+                    <p>Reserva el tiempo que necesites</p>
+                    <p>Elige tu horario y asegura tu lugar sin complicaciones.</p>
+                </div>
+                <div>
+                    <h3>¿Tienes una reunión importante?</h3>
+                    <p>Contamos con salas de reuniones privadas</p>
+                    <p>Ambientes privados, cómodos y con todo lo necesario para tu equipo o clientes.</p>
+                </div>
+            </div>
+            <a href="{{ route('cliente.buscar_espacios') }}" class="btn-principal">Ver oficinas ></a>
+        </div>
+        <div class="hero-img"></div>
+    </div>
+    
+    <h2 id="subtitulo_espacios" style="margin: 20px 5%;">Espacios Destacados</h2>
+    
+    <div class="slider-container">
+        <button class="prev">‹</button>
+        <div class="slider-wrapper">
+            <div class="slider">
+                @forelse($espacios as $espacio)
+                    <div class="slide-card">
+                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF1 .jpeg') }}" alt="{{ $espacio->esp_nombre }}">
+                        <h3>{{ $espacio->esp_nombre }}</h3>
+                        <p>{{ $espacio->esp_descripcion ?? 'Espacio ideal para tus proyectos.' }}</p>
+                    </div>
+                @empty
+                    <!-- Fallback si la BD aún está vacía -->
+                    <div class="slide-card">
+                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF1 .jpeg') }}" alt="Oficina 1">
+                        <h3>Oficina Privada Industrial y Contemporánea</h3>
+                        <p>Diseño industrial moderno, ideal para empresas o equipos profesionales.</p>
+                    </div>
+
+                    <div class="slide-card">
+                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF 3.jpeg') }}" alt="Oficina 2">
+                        <h3>Oficina Privada Moderna y Minimalista</h3>
+                        <p>Diseño moderno y minimalista, ideal para productividad y comodidad.</p>
+                    </div>
+
+                    <div class="slide-card">
+                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF 13.jpg') }}" alt="Oficina 3">
+                        <h3>Oficina Compartida Equipada y Luminosa</h3>
+                        <p>Múltiples estaciones de trabajo, ideal para equipos colaborativos.</p>
+                    </div>
+
+                    <div class="slide-card">
+                        <img src="{{ asset('ASSETS/Imagenes oficinas/Ofic 8.jpeg') }}" alt="Oficina 4">
+                        <h3>Sala de Reuniones Ejecutiva</h3>
+                        <p>Espacio privado y profesional para juntas importantes.</p>
+                    </div>
+
+                    <div class="slide-card">
+                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF12.jpeg') }}" alt="Oficina 5">
+                        <h3>Escritorio Colaborativo</h3>
+                        <p>Espacio abierto perfecto para freelancers y emprendedores.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+        <button class="next">›</button>
+    </div>
+@endsection
+
+@section('scripts')
+    <!-- Mueve tu JS a la carpeta public/js/cliente/ y cárgalo con asset() -->
+    <script src="{{ asset('js/cliente/esp_destacados.js') }}"></script>
+@endsection
