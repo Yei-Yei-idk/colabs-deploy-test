@@ -107,7 +107,7 @@ function openReviewModal(espacioId, reservaId) {
 
     document.getElementById('modal_espacio_id').value = espacioId;
     document.getElementById('modal_reserva_id').value = reservaId;
-    modal.style.display = 'flex';
+    modal.classList.remove('modal-hidden');
     
     // Resetear valores
     const puntuacionInput = document.getElementById('modal_puntuacion');
@@ -129,5 +129,5 @@ function openReviewModal(espacioId, reservaId) {
 
 function closeReviewModal() {
     const modal = document.getElementById('modalCalificar');
-    if (modal) modal.style.display = 'none';
+    if (modal) modal.classList.add('modal-hidden');
 }

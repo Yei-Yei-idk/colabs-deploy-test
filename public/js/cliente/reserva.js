@@ -299,12 +299,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('confirmPrecio').innerHTML = `<span class="font-500">$${precioHora.toLocaleString('es-CO')} x ${duracion} hora${duracion > 1 ? 's' : ''}</span>`;
         document.getElementById('confirmTotal').textContent = `$${total.toLocaleString('es-CO')} COP`;
         
-        document.getElementById('confirmBookingPopup').style.display = 'flex';
+        document.getElementById('confirmBookingPopup').classList.remove('modal-hidden');
         document.body.style.overflow = 'hidden';
     };
 
     window.closeConfirmBookingPopup = () => {
-        document.getElementById('confirmBookingPopup').style.display = 'none';
+        document.getElementById('confirmBookingPopup').classList.add('modal-hidden');
         document.body.style.overflow = 'auto';
     };
 
@@ -334,12 +334,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.openReviewsModal = () => {
-        document.getElementById('reviewsModal').style.display = 'flex';
+        document.getElementById('reviewsModal').classList.remove('modal-hidden');
         document.body.style.overflow = 'hidden';
     };
 
     window.closeReviewsModal = () => {
-        document.getElementById('reviewsModal').style.display = 'none';
+        document.getElementById('reviewsModal').classList.add('modal-hidden');
         document.body.style.overflow = 'auto';
     };
 
@@ -358,4 +358,3 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarHorasInicio();
     verificarDisponibilidadPorHora();
 });
-alizarHorasInicio();

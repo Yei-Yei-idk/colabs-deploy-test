@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('rsva_fecha');
             $table->string('rsva_estado', 30);
             $table->longText('rsva_descripcion');
+            $table->integer('rsva_num_invitados')->nullable();
             $table->integer('user_id')->index('user_id');
             $table->integer('espacio_id')->index('espacio_id');
         });

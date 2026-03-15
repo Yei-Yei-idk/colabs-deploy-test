@@ -18,7 +18,7 @@ return new class extends Migration
                 'esp_capacidad' => 8,
                 'esp_tipo' => 'Sala de reuniones',
                 'esp_precio_hora' => 45000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'OF 13.jpg'
             ],
             [
@@ -28,7 +28,7 @@ return new class extends Migration
                 'esp_capacidad' => 2,
                 'esp_tipo' => 'Oficina',
                 'esp_precio_hora' => 30000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'OF 3.jpeg'
             ],
             [
@@ -38,7 +38,7 @@ return new class extends Migration
                 'esp_capacidad' => 25,
                 'esp_tipo' => 'Aula',
                 'esp_precio_hora' => 120000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'OF 9.jpeg'
             ],
             [
@@ -48,7 +48,7 @@ return new class extends Migration
                 'esp_capacidad' => 4,
                 'esp_tipo' => 'Oficina',
                 'esp_precio_hora' => 25000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'OF1 .jpeg'
             ],
             [
@@ -58,7 +58,7 @@ return new class extends Migration
                 'esp_capacidad' => 50,
                 'esp_tipo' => 'Sala de eventos',
                 'esp_precio_hora' => 250000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'OF12.jpeg'
             ],
             [
@@ -68,7 +68,7 @@ return new class extends Migration
                 'esp_capacidad' => 14,
                 'esp_tipo' => 'Oficina',
                 'esp_precio_hora' => 15000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'Of 14 puestos de trabajo .jpeg'
             ],
             [
@@ -78,7 +78,7 @@ return new class extends Migration
                 'esp_capacidad' => 5,
                 'esp_tipo' => 'Oficina',
                 'esp_precio_hora' => 35000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'Ofic 5 -3.jpeg'
             ],
             [
@@ -88,7 +88,7 @@ return new class extends Migration
                 'esp_capacidad' => 12,
                 'esp_tipo' => 'Sala de reuniones',
                 'esp_precio_hora' => 60000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'Ofic 8.jpeg'
             ],
             [
@@ -98,7 +98,7 @@ return new class extends Migration
                 'esp_capacidad' => 1,
                 'esp_tipo' => 'Oficina',
                 'esp_precio_hora' => 20000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'ofic 11.jpeg'
             ],
             [
@@ -108,7 +108,7 @@ return new class extends Migration
                 'esp_capacidad' => 10,
                 'esp_tipo' => 'Sala de reuniones',
                 'esp_precio_hora' => 40000,
-                'esp_estado' => 'Disponible',
+                'esp_estado' => 'Activo',
                 'imagen' => 'ofic 5 -2.jpeg'
             ],
         ];
