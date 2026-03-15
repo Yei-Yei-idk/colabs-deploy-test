@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\InicioController;
+
+Route::get('/', [InicioController::class, 'index'])->name('inicio');
+Route::get('/nosotros', [InicioController::class, 'nosotros'])->name('nosotros');
+Route::get('/ubicacion', [InicioController::class, 'ubicacion'])->name('ubicacion');
+Route::get('/servicios', [InicioController::class, 'servicios'])->name('servicios');
 
 Route::get('/cliente', [ClienteController::class, 'index'])->name('cliente.index');
 

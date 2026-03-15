@@ -1,0 +1,10 @@
+.sede-info { padding: 60px 20px; text-align: center; background: #fff; }
+.sede-info p { max-width: 800px; margin: 20px auto; }
+
+.ubicacion-grid { display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; justify-content: center; }
+.columna-mapa, .columna-info { flex: 1; min-width: 350px; max-width: 600px; }
+.columna-info img { width: 100%; border-radius: 10px; margin: 20px auto 0; display: block; }
+
+.redes { padding: 40px; text-align: center; background: #f4f4f4; }
+.red-item { margin: 20px 0; }
+.red-item img { height: 200px; object-fit: cover; border-radius: 10px; margin: 0 auto; display: block; }

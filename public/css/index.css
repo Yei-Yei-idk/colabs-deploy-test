@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ─────────────── TOKENS ─────────────── */
+:root {
+  --y:  #facc15;
+  --yd: #e6b800;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.1);
+  --shadow-md: 0 6px 20px rgba(0,0,0,.1);
+  --shadow-lg: 0 12px 30px rgba(0,0,0,.15);
+  --r:   8px;
+  --rl:  12px;
+  --rll: 16px;
+  --t:   .25s ease;
+}
+
+/* ─────────────── ANIMACIONES ─────────────── */
+@keyframes fadeIn  { from{opacity:0} to{opacity:1} }
+@keyframes slideIn { from{opacity:0;transform:translateY(-14px) scale(.96)} to{opacity:1;transform:none} }
+@keyframes fadeUp  { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+
+/* ─────────────── RESET ─────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #000;
+  background: #f4f4f2;
+  padding-top: 80px;
+}
+
+img { display:block; max-width:100%; }
+a   { text-decoration:none; }
+
+/* ─────────────── HEADER ─────────────── */
+header {
+  width: 100%;
+  background: #000;
+  padding: 12px 5%;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 1000;
+  transition: box-shadow var(--t);
+}
+header:hover { box-shadow: 0 4px 20px rgba(250,204,21,.15); }
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  transition: color var(--t);
+}
+.logo:hover { color: var(--y); }
+.logo img   { height: 32px; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+}
+.menu a {
+  color: #fff;
+  font-weight: 500;
+  position: relative;
+  padding-bottom: 3px;
+  transition: color var(--t);
+}
+.menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--y);
+  transition: width .3s;
+}
+.menu a:hover,
+.menu a.active        { color: var(--y); }
+.menu a:hover::after,
+.menu a.active::after { width: 100%; }
+
+/* Botones sesión */
+.botones-sesion {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.btn-sesion {
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: background var(--t), transform var(--t), box-shadow var(--t);
+}
+.btn-sesion:hover { transform: scale(1.05); }
+
+.iniciar {
+  background: var(--y);
+  color: #000;
+}
+.iniciar:hover {
+  background: var(--yd);
+  box-shadow: 0 4px 14px rgba(250,204,21,.4);
+}
+.registrarse {
+  background: #e5e7eb;
+  color: #1e293b;
+}
+.registrarse:hover { background: #d4d4d4; }
+
+/* ─────────────── SECCIONES ─────────────── */
+.section {
+  width: 100%;
+  padding: 40px 5%;
+  animation: fadeUp .5s ease forwards;
+}
+
+/* ─────────────── CONTAINER ─────────────── */
+.container {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  padding: 36px 40px;
+  background: #fff;
+  border-radius: var(--rll);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  transition: transform var(--t), box-shadow var(--t);
+}
+.container:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.container h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: -.3px;
+}
+.container p {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.7;
+}
+
+/* ─────────────── ESPACIOS ─────────────── */
+.espacios {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.espacios > h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -.3px;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.espacio {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 28px;
+  padding: 24px;
+  background: #fff;
+  border-radius: var(--rl);
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid transparent;
+  transition: transform .3s, box-shadow .3s, border-color .3s;
+}
+.espacio:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--y);
+}
+.espacio.invertido {
+  flex-direction: row-reverse;
+  border-left: none;
+  border-right: 4px solid transparent;
+}
+.espacio.invertido:hover { border-right-color: var(--y); }
+
+.espacio img {
+  width: 42%;
+  max-width: 420px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: var(--rl);
+  flex-shrink: 0;
+  transition: transform .4s;
+}
+.espacio:hover img { transform: scale(1.03); }
+
+.espacio .texto { flex: 1; text-align: left; }
+
+.espacio h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -.2px;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.espacio p {
+  font-size: .95rem;
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.espacio a {
+  display: inline-block;
+  background: var(--y);
+  color: #000;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: background var(--t), transform var(--t), box-shadow var(--t);
+}
+.espacio a:hover {
+  background: var(--yd);
+  transform: scale(1.05);
+  box-shadow: 0 4px 14px rgba(250,204,21,.4);
+}
+
+/* ─────────────── FOOTER ─────────────── */
+footer {
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 24px 20px;
+  font-size: .85rem;
+  margin-top: 60px;
+}
+footer a { color: var(--y); font-weight: 700; }
+footer a:hover { text-decoration: underline; }
+
+/* ─────────────── RESPONSIVE ─────────────── */
+@media (max-width: 900px) {
+  .espacio,
+  .espacio.invertido {
+    flex-direction: column;
+    gap: 20px;
+    border-left: 4px solid transparent;
+    border-right: none;
+  }
+  .espacio:hover    { border-left-color: var(--y); }
+  .espacio img      { width: 100%; max-width: 100%; height: 220px; }
+  .espacio .texto   { width: 100%; }
+}
+
+@media (max-width: 600px) {
+  header          { padding: 12px 4%; }
+  .menu           { gap: 14px; }
+  .menu a         { font-size: .85rem; }
+  .botones-sesion { gap: 6px; }
+  .btn-sesion     { padding: 7px 12px; font-size: 12px; }
+  .section        { padding: 30px 4%; }
+  .container      { padding: 24px 20px; }
+  .espacio        { padding: 16px; }
+}
