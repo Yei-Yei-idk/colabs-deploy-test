@@ -293,8 +293,8 @@ nav img  { height:32px; }
 
 /* ─────────────── PERFIL ─────────────── */
 .Titulo_perfil { font-size:2rem; font-weight:700; margin-bottom:20px; text-align:center; color:#212121; }
-.perfil-container { display:flex; gap:30px; margin:0 auto; max-width:1000px; padding:20px; }
-.perfil-left { flex:1; max-width:280px; background:#fff; padding:20px; border-radius:var(--rll); box-shadow:var(--shadow-sm); border-top:5px solid #FFD600; display:flex; flex-direction:column; align-items:center; gap:12px; transition:box-shadow var(--t); }
+.perfil-container { display:flex; gap:30px; margin:0 auto; max-width:1000px; padding:20px; align-items: flex-start; }
+.perfil-left { flex:1; max-width:280px; background:#fff; padding:20px; border-radius:var(--rll); box-shadow:var(--shadow-sm); border-top:5px solid #FFD600; display:flex; flex-direction:column; align-items:center; gap:12px; transition:box-shadow var(--t); height: fit-content; }
 .perfil-left:hover { box-shadow:var(--shadow-lg); }
 .foto-wrapper { display:flex; flex-direction:column; align-items:center; gap:10px; }
 .Foto_usuario { width:140px; height:140px; border-radius:50%; border:5px solid #FFD600; object-fit:cover; transition:transform .3s, box-shadow .3s; }
@@ -555,4 +555,3 @@ nav img  { height:32px; }
     .booking-popup-buttons { flex-direction: column; }
     .booking-cancel-btn, .booking-confirm-btn { width: 100%; }
 }
-

@@ -10,7 +10,7 @@ class InicioController extends Controller
             [
                 'titulo'    => 'OFICINAS PERSONALES',
                 'desc'      => 'Espacio para una persona, cómodo.',
-                'imagen'    => 'imagenes/oficinas-personal.png',
+                'imagen'    => 'OF12.jpeg',
                 'alt'       => 'Oficinas personales',
                 'link'      => route('cliente.buscar_espacios'),
                 'invertido' => false,
@@ -18,7 +18,7 @@ class InicioController extends Controller
             [
                 'titulo'    => 'OFICINAS COMPARTIDAS',
                 'desc'      => 'Sala más amplia para varios trabajadores.',
-                'imagen'    => 'imagenes/oficinas-compartidas.png',
+                'imagen'    => 'Of 14 puestos de trabajo .jpeg',
                 'alt'       => 'Oficinas compartidas',
                 'link'      => route('cliente.buscar_espacios'),
                 'invertido' => true,
@@ -26,7 +26,7 @@ class InicioController extends Controller
             [
                 'titulo'    => 'SALAS DE REUNIONES',
                 'desc'      => 'Espacios modernos con todos los servicios.',
-                'imagen'    => 'imagenes/salas-reuniones.png',
+                'imagen'    => 'ofic 11.jpeg',
                 'alt'       => 'Salas de reuniones',
                 'link'      => route('cliente.buscar_espacios'),
                 'invertido' => false,
@@ -34,7 +34,7 @@ class InicioController extends Controller
             [
                 'titulo'    => 'CAFETERÍA',
                 'desc'      => 'Todos los trabajadores merecen un descanso.',
-                'imagen'    => 'imagenes/cafeteria.png',
+                'imagen'    => 'WhatsApp Image 2025-09-05 at 11.24.18 AM.jpeg',
                 'alt'       => 'Cafetería',
                 'link'      => route('cliente.buscar_espacios'),
                 'invertido' => true,

@@ -28,7 +28,7 @@
 
                 @unless ($espacio['invertido'])
                     <img
-                        src="{{ asset($espacio['imagen']) }}"
+                        src="{{ asset('ASSETS/' . $espacio['imagen']) }}"
                         alt="{{ $espacio['alt'] }}"
                         loading="lazy"
                         width="440" height="300"
@@ -43,7 +43,7 @@
 
                 @if ($espacio['invertido'])
                     <img
-                        src="{{ asset($espacio['imagen']) }}"
+                        src="{{ asset('ASSETS/' . $espacio['imagen']) }}"
                         alt="{{ $espacio['alt'] }}"
                         loading="lazy"
                         width="440" height="300"
