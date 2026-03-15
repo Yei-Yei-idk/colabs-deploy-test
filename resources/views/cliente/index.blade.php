@@ -26,46 +26,49 @@
         <div class="hero-img"></div>
     </div>
     
-    <h2 id="subtitulo_espacios" style="margin: 20px 5%;">Espacios Destacados</h2>
+    <h2 id="subtitulo_espacios" class="mis-reservas-header mt-20 mb-20">Espacios Destacados</h2>
     
     <div class="slider-container">
         <button class="prev">‹</button>
         <div class="slider-wrapper">
             <div class="slider">
                 @forelse($espacios as $espacio)
+                    @php
+                        $imgSrc = $espacio->imagen ? $espacio->imagen->foto : 'default.jpg';
+                    @endphp
                     <div class="slide-card">
-                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF1 .jpeg') }}" alt="{{ $espacio->esp_nombre }}">
+                        <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $espacio->esp_nombre }}" onerror="this.src='{{ asset('uploads/OF1 .jpeg') }}'">
                         <h3>{{ $espacio->esp_nombre }}</h3>
                         <p>{{ $espacio->esp_descripcion ?? 'Espacio ideal para tus proyectos.' }}</p>
                     </div>
                 @empty
                     <!-- Fallback si la BD aún está vacía -->
                     <div class="slide-card">
-                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF1 .jpeg') }}" alt="Oficina 1">
+                        <img src="{{ asset('uploads/OF1 .jpeg') }}" alt="Oficina 1">
                         <h3>Oficina Privada Industrial y Contemporánea</h3>
                         <p>Diseño industrial moderno, ideal para empresas o equipos profesionales.</p>
                     </div>
 
                     <div class="slide-card">
-                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF 3.jpeg') }}" alt="Oficina 2">
+                        <img src="{{ asset('uploads/OF 3.jpeg') }}" alt="Oficina 2">
                         <h3>Oficina Privada Moderna y Minimalista</h3>
                         <p>Diseño moderno y minimalista, ideal para productividad y comodidad.</p>
                     </div>
 
                     <div class="slide-card">
-                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF 13.jpg') }}" alt="Oficina 3">
+                        <img src="{{ asset('uploads/OF 13.jpg') }}" alt="Oficina 3">
                         <h3>Oficina Compartida Equipada y Luminosa</h3>
                         <p>Múltiples estaciones de trabajo, ideal para equipos colaborativos.</p>
                     </div>
 
                     <div class="slide-card">
-                        <img src="{{ asset('ASSETS/Imagenes oficinas/Ofic 8.jpeg') }}" alt="Oficina 4">
+                        <img src="{{ asset('uploads/Ofic 8.jpeg') }}" alt="Oficina 4">
                         <h3>Sala de Reuniones Ejecutiva</h3>
                         <p>Espacio privado y profesional para juntas importantes.</p>
                     </div>
 
                     <div class="slide-card">
-                        <img src="{{ asset('ASSETS/Imagenes oficinas/OF12.jpeg') }}" alt="Oficina 5">
+                        <img src="{{ asset('uploads/OF12.jpeg') }}" alt="Oficina 5">
                         <h3>Escritorio Colaborativo</h3>
                         <p>Espacio abierto perfecto para freelancers y emprendedores.</p>
                     </div>

@@ -87,7 +87,7 @@ nav img  { height:32px; }
   background:url("/ASSETS/Fondo_cliente.png") no-repeat center/cover; position:relative;
 }
 .hero::before {
-  content:''; position:absolute; inset:0; background:linear-gradient(to right,#fff 40%,transparent); z-index:1;
+  content:''; position:absolute; inset:0; background:linear-gradient(to right,rgba(255,255,255,0.92) 35%,rgba(255,255,255,0.15)); z-index:1;
 }
 .hero-text { position:relative; z-index:2; max-width:600px; padding:0 40px 0 60px; }
 .hero-text h2 { font-size:36px; font-weight:800; margin-bottom:20px; }
@@ -113,7 +113,7 @@ nav img  { height:32px; }
   background:var(--y); color:#000; border:none; font-weight:700; cursor:pointer;
   transition:background var(--t), transform var(--t);
 }
-.btn-detalles  { padding:8px 16px; border-radius:5px; text-decoration:none; }
+.btn-detalles  { display:inline-block; padding:8px 16px; border-radius:5px; text-decoration:none; white-space:nowrap; }
 .btn-detalles:hover, .btn-foto:hover, .btn-guardar:hover, .editar-bloque:hover { background:#FBC02D; transform:translateY(-1px); }
 .btn-guardar {
   display:none; width:100%; padding:12px; border-radius:var(--r); margin-top:15px;
@@ -178,7 +178,7 @@ nav img  { height:32px; }
 .sidebar .aplicar-filtros:hover { background:var(--yd); transform:scale(1.03); }
 
 /* ─────────────── TARJETAS DE ESPACIOS ─────────────── */
-.espacios-listado { display:flex; flex-direction:column; gap:20px; }
+.espacios-listado { display:flex; flex-direction:column; gap:20px; flex:1; }
 .espacio-card {
   display:flex; background:#fff; border-radius:var(--rl); box-shadow:var(--shadow-md);
   overflow:hidden; align-items:center; justify-content:space-between; padding:15px 20px;
@@ -239,10 +239,8 @@ nav img  { height:32px; }
 .right-section { width:450px; flex-shrink:.2; background:#fff; border-radius:var(--rl); padding:20px; }
 .booking-sidebar, .galeria-img {
   background:#fff; border-radius:var(--rl); box-shadow:var(--shadow-md);
-  padding:15px 20px; transition:transform .3s, box-shadow .3s;
+  padding:15px 20px;
 }
-.galeria-img { margin-top:22px; }
-.booking-sidebar:hover, .galeria-img:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
 .price-display { text-align:left; margin-bottom:20px; }
 .price-amount  { font-size:24px; font-weight:600; display:block; }
 .price-period  { color:#666; font-size:14px; }
@@ -284,9 +282,9 @@ nav img  { height:32px; }
 .h2-misreservas { margin-bottom:20px; }
 .card { display:flex; align-items:center; background:#fff; border-radius:var(--r); box-shadow:var(--shadow-sm); margin-bottom:15px; padding:15px; border-left:5px solid #ccc; transition:transform .25s, box-shadow .25s; }
 .card:hover { transform:translateX(4px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
-.card-aceptada img,.card-pendiente img,.card-rechazada img,.card-finalizada img { width:80px; height:80px; background:#eaeaea; border-radius:6px; margin-right:20px; }
+.card img { width:80px; height:80px; object-fit:cover; background:#eaeaea; border-radius:6px; margin-right:20px; flex-shrink: 0; }
 .card-content { flex:1; } .card-content h3 { margin:0; font-size:18px; } .card-content p { margin:5px 0; color:#555; }
-.card-right { text-align:right; }
+.card-right { text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:10px; justify-content:center; }
 .estado { font-weight:700; }
 .aceptada  { border-left-color:#28a745; } .pendiente { border-left-color:#333; }
 .rechazada { border-left-color:#dc3545; } .finalizada{ border-left-color:#ffc107; }
@@ -340,6 +338,21 @@ nav img  { height:32px; }
 .modal-footer { padding:16px 32px 24px; border-top:1px solid #f1f1f1; text-align:center; }
 .modal-total-reviews { color:#666; font-size:14px; }
 
+/* ── Sistema de Estrellas ── */
+.star-rating { display:flex; gap:8px; font-size:32px; cursor:pointer; color:#ddd; margin:10px 0; transition: transform 0.2s; }
+.star-rating .star { transition: color 0.2s, transform 0.2s; }
+.star-rating .star:hover { transform: scale(1.2); }
+.star-rating .star.active { color:#FFD700; }
+.rating-text { font-size:14px; color:#666; margin-bottom:15px; font-weight: 500; }
+.char-count { text-align:right; font-size:12px; color:#999; margin-top:5px; }
+.btn-submit-review { background:var(--y); color:#000; border:none; padding:12px 24px; border-radius:var(--r); font-weight:700; cursor:pointer; width:100%; margin-top:15px; transition: background 0.2s; }
+.btn-submit-review:hover { background:var(--yd); }
+.form-label { display:block; font-weight:600; font-size:15px; margin-bottom:8px; color:#333; }
+.form-textarea { width:100%; min-height:120px; padding:12px 16px; border:2px solid #eee; border-radius:var(--r); font-family:inherit; font-size:14px; transition:border-color 0.3s, box-shadow 0.3s; resize:vertical; }
+.form-textarea:focus { outline:none; border-color:var(--y); box-shadow:0 0 0 4px rgba(250,204,21,.1); }
+
+
+
 /* ─────────────── DETALLES DE RESERVA ─────────────── */
 .breadcrumb { background:#fff; padding:15px 30px; border-radius:var(--r); margin-bottom:20px; font-size:14px; color:#666; }
 .breadcrumb a { color:#666; text-decoration:none; transition:color var(--t); }
@@ -375,6 +388,173 @@ nav img  { height:32px; }
 .cost-summary { border-top:1px solid #eee; padding-top:15px; margin-bottom:20px; }
 .cost-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; color:#666; }
 .total-row { display:flex; justify-content:space-between; align-items:center; font-size:16px; font-weight:600; border-top:1px solid #eee; padding-top:10px; margin-top:10px; }
+
+/* ─────────────── NOTIFICACIONES ─────────────── */
+.notificacion { border-left:4px solid; padding:10px; background:#f9f9f9; border-radius:var(--r); color:#333; transition:background .2s, transform .2s; }
+/* .notificacion:hover { background:#f0f0f0; transform:translateX(3px); } */
+.notificacion.Aceptada { border-color:#28a745; background-color: #f3fcf5; } 
+.notificacion.Pendiente { border-color:#FFD600; background-color: #fffdf0; } 
+.notificacion.Rechazada, .notificacion.Cancelada { border-color:#dc3545; background-color: #fcf2f3; } 
+.notificacion.Finalizada { border-color:#ffc107; background-color: #fffef2; } 
+.notificacion.reseña { border-color:#17a2b8; }
+.notificacion strong { color:#222; } .notificacion p { color:#555; }
+.notificacion button { margin-top:5px; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; font-weight:700; transition:opacity .2s, transform .2s; }
+.notificacion button:hover { opacity:.85; transform:scale(1.03); }
+.btn-ver { background:#3f51b5; color:#fff; } .btn-alternativa,.btn-reseña { background:#ffc107; color:#000; }
+
+/* ─────────────── POPUP ─────────────── */
+.popup-overlay { position:fixed; inset:0; background:rgba(0,0,0,.3); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:999; }
+.popup { background:#fff; border-radius:var(--rl); padding:24px; text-align:center; max-width:360px; width:90%; box-shadow:0 4px 20px rgba(0,0,0,.3); animation:scaleIn .2s ease; }
+.popup-icon { margin-bottom:12px; }
+.popup-buttons { display:flex; justify-content:space-around; margin-top:20px; }
+
+/* ─────────────── MISC ─────────────── */
+.detalles-espacio { background:#fff; border-radius:var(--rl); box-shadow:var(--shadow-md); padding:30px 20px; margin-top:50px; }
+.container { display:flex; gap:24px; align-items:flex-start; }
+
+/* ─────────────── UTILIDADES Y ALERTAS ─────────────── */
+.alert { padding: 14px 20px; border-radius: var(--r); margin-bottom: 20px; font-weight: 500; border-left: 4px solid; animation: fadeIn 0.3s ease; }
+.alert-success { background: #d4edda; color: #155724; border-color: #28a745; }
+.alert-error   { background: #f8d7da; color: #721c24; border-color: #dc3545; }
+.alert-warning { background: #fff3cd; color: #856404; border-color: #FFD600; }
+
+.mt-20 { margin-top: 20px; }
+.mb-20 { margin-bottom: 20px; }
+.text-center { text-align: center; }
+.w-full { width: 100%; }
+.flex-2 { flex: 2; }
+.flex-1 { flex: 1; }
+.pointer { cursor: pointer; }
+
+/* ─────────────── COMPONENTES ESPECÍFICOS ─────────────── */
+.mis-reservas-header { margin-left: 5%; margin-top: 30px; }
+.mis-reservas-header h2 { font-size: 28px; font-weight: 700; }
+.mis-reservas-list { margin: 0 5% 40px; }
+
+.reserva-badge { font-weight: bold; padding: 5px 12px; border-radius: 20px; font-size: 13px; text-transform: uppercase; }
+.reserva-id-tag { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+
+.empty-state { text-align: center; padding: 50px; background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); }
+.empty-state-icon { font-size: 48px; margin-bottom: 15px; }
+
+.perfil-avatar-container { text-align: center; margin-bottom: 20px; }
+.perfil-form-container { max-width: 1000px; margin: 0 auto; }
+.breadcrumb-container { background:#fff; padding:15px 30px; border-radius:var(--r); margin-bottom:20px; font-size:14px; color:#666; }
+
+/* ── Estilos Layout ── */
+.notification-time { font-size: 12px; margin-top: 5px; color: #666; }
+.btn-dark { background: #000 !important; color: #fff !important; }
+.text-muted { color: #555; }
+.modal-hidden { display: none; }
+.modal-small { max-width: 500px !important; }
+.modal-description { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+/* ── Estilos Mis Reservas ── */
+.reserva-card-main { position: relative; border-left: 6px solid #ccc; background: #fff; border-radius: var(--rl); padding: 20px; display: flex; gap: 20px; box-shadow: var(--shadow-sm); transition: transform 0.3s, box-shadow 0.3s; margin-bottom: 25px; overflow: hidden; align-items: center; }
+.reserva-card-main:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.reserva-card-main img { width: 140px; height: 140px; border-radius: var(--r); object-fit: cover; flex-shrink: 0; }
+
+.border-aceptada, .border-confirmada { border-left-color: #28a745 !important; }
+.border-pendiente { border-left-color: #FFD600 !important; }
+.border-rechazada, .border-cancelada { border-left-color: #dc3545 !important; }
+.border-finalizada { border-left-color: #ffc107 !important; }
+
+.reserva-info-body { flex: 2; }
+.reserva-info-body h3 { font-size: 20px; margin-bottom: 5px; }
+.reserva-info-body p { color: #666; margin-bottom: 12px; }
+.reserva-meta { display: flex; gap: 20px; font-size: 14px; margin-bottom: 8px; }
+
+.reserva-actions-column { flex: 1; text-align: right; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 10px; }
+.reserva-total-box { text-align: right; }
+.reserva-total-label { font-size: 14px; color: #666; }
+.reserva-total-amount { font-size: 22px; font-weight: 800; color: #000; }
+
+.badge-aceptada, .badge-confirmada { background: #d4edda !important; color: #155724 !important; }
+.badge-pendiente { background: #fff3cd !important; color: #856404 !important; }
+.badge-rechazada, .badge-cancelada { background: #f8d7da !important; color: #721c24 !important; }
+.badge-finalizada { background: #e2e3e5 !important; color: #383d41 !important; }
+
+.btn-calificar { background: #FFD700 !important; color: #000 !important; border: none !important; }
+.success-text { color: green; font-weight: bold; }
+.mt-5 { margin-top: 5px; }
+.mt-15 { margin-top: 15px; }
+.w-full-btn { width: 100%; display: block; text-align: center; }
+
+.m-0 { margin: 0 !important; }
+.pl-20 { padding-left: 20px !important; }
+
+/* ── Estilos Reservar (Disponibilidad) ── */
+.status-box { padding: 12px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: 500; }
+.status-success { background: #d4edda; color: #155724; }
+.status-info    { background: #fff3cd; color: #856404; }
+.status-error   { background: #f8d7da; color: #721c24; }
+
+.block-container { display: flex; flex-direction: column; gap: 8px; }
+.block-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-radius: 8px; border-left: 4px solid; }
+.block-time { font-weight: 500; color: #333; }
+.block-status { font-weight: 600; }
+
+.spin { margin: 10px auto; width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid var(--y); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.p-20 { padding: 20px; }
+
+.font-14 { font-size: 14px; }
+.mb-10 { margin-bottom: 10px; }
+.badge-rechazada { background: #f8d7da !important; color: #721c24 !important; }
+.badge-aceptada { background: #d4edda !important; color: #155724 !important; }
+
+.capitalize { text-transform: capitalize; }
+.text-orange { color: orange; }
+.text-red { color: red; }
+.text-gray { color: gray; }
+.font-bold { font-weight: bold; }
+.font-800 { font-weight: 800; }
+.font-500 { font-weight: 500; }
+.p-12 { padding: 12px !important; }
+.r-8 { border-radius: 8px !important; }
+.r-12 { border-radius: 12px !important; }
+.font-15 { font-size: 15px; }
+.h2-style { font-size: 20px; margin-bottom: 10px; }
+/* ─────────────── POPUPS DE RESERVA ─────────────── */
+.booking-popup { background: #fff; border-radius: 16px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.2); animation: scaleIn 0.3s ease; }
+.booking-popup-header { color: black; padding: 24px; text-align: center; border-radius: 16px 16px 0 0; }
+.booking-popup-icon { font-size: 48px; margin-bottom: 8px; }
+.booking-popup-header h3 { margin: 8px 0 4px 0; font-size: 22px; font-weight: 600; }
+.booking-popup-subtitle { font-size: 14px; opacity: 0.9; margin: 0; }
+.booking-popup-content { padding: 24px; }
+.booking-section { margin-bottom: 20px; }
+.booking-section h4, .booking-services h4, .booking-important h4 { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; }
+.booking-detail { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+.booking-detail:last-child { border-bottom: none; }
+.booking-label { color: #666; font-size: 14px; }
+.booking-value { color: #333; font-weight: 500; font-size: 14px; text-align: right; }
+.booking-services { background: #f0fdf4; padding: 16px; border-radius: 12px; margin-bottom: 20px; }
+.booking-services h4 { color: #166534; border-bottom: 2px solid #bbf7d0; margin-bottom: 12px; }
+.booking-services .services-list { list-style: none; padding: 0; margin: 0; }
+.booking-services .services-list li { color: #166534; padding: 6px 0; font-size: 14px; }
+.booking-important { background: #fffbeb; padding: 16px; border-radius: 12px; border-left: 4px solid #f59e0b; margin-bottom: 20px; }
+.booking-important h4 { color: #92400e; border: none; margin-bottom: 8px; }
+.booking-important p { color: #78350f; font-size: 13px; line-height: 1.5; margin: 0; }
+.booking-total { background: #f9fafb; padding: 16px; border-radius: 12px; margin-top: 20px; }
+.total-line { border-top: 2px solid #e5e7eb; padding-top: 12px; margin-top: 8px; }
+.booking-label-total { color: #111827; font-size: 16px; font-weight: 600; }
+.booking-value-total { color: #111827; font-size: 18px; font-weight: 700; text-align: right; }
+.booking-popup-buttons { display: flex; gap: 12px; padding: 16px 24px 24px 24px; justify-content: flex-end; }
+.booking-cancel-btn { background: #fff; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px 28px; color: #374151; font-weight: 500; cursor: pointer; transition: all 0.2s ease; font-size: 15px; }
+.booking-cancel-btn:hover { border-color: #d1d5db; background: #f9fafb; }
+.booking-confirm-btn { background-color: #FFD700; color: #000; border: none; border-radius: 12px; padding: 12px 28px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 15px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+.booking-confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4); }
+.booking-popup::-webkit-scrollbar { width: 6px; }
+.booking-popup::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+.booking-popup::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+
+@media (max-width: 600px) {
+    .booking-popup { width: 95%; max-height: 85vh; }
+    .booking-popup-buttons { flex-direction: column; }
+    .booking-cancel-btn, .booking-confirm-btn { width: 100%; }
+}
+
 
 /* ─────────────── NOTIFICACIONES ─────────────── */
 .notificacion { border-left:4px solid; padding:10px; background:#f9f9f9; border-radius:var(--r); color:#333; transition:background .2s, transform .2s; }

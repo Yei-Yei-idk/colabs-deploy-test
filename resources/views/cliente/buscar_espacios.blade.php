@@ -56,28 +56,32 @@
         </form>
 
         <!-- 🔹 LISTADO DE ESPACIOS -->
-        <div class="espacios-listado" style="width: 100%;">
+        <div class="espacios-listado">
             @forelse ($espacios as $espacio)
                 @php
                     // Resolver la imagen a mostrar
                     $imgSrc = $espacio->imagen ? $espacio->imagen->foto : 'default.jpg';
                 @endphp
                 <div class="espacio-card">
-                    <!-- Si tienes una carpeta llamada `Actualizados_Super/Espacios/` en public, úsala así: -->
-                    {{-- <img src="{{ asset('Actualizados_Super/Espacios/' . $imgSrc) }}" alt="{{ $espacio->esp_nombre }}"> --}}
-                    
-                    <!-- Temporal, usando el asset default asumiendo migración progresiva -->
-                    <img src="{{ asset('ASSETS/Imagenes oficinas/OF1 .jpeg') }}" alt="{{ $espacio->esp_nombre }}">
+                    <!-- Mostrando la imagen real subida (o la de por defecto si no tiene) -->
+                    <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $espacio->esp_nombre }}" onerror="this.src='{{ asset('uploads/OF1 .jpeg') }}'">
                     
                     <div class="espacio-info">
                         <h3>{{ $espacio->esp_nombre }}</h3>
-                        <p>{{ $espacio->esp_descripcion }}</p>
+                        <p>{{ Str::limit($espacio->esp_descripcion, 100) }}</p>
                         <p><strong>Capacidad:</strong> {{ $espacio->esp_capacidad }} personas</p>
                         <p><strong>Tipo:</strong> {{ $espacio->esp_tipo }}</p>
-                        <p><strong>Precio por hora:</strong> ${{ number_format($espacio->esp_precio_hora, 0, ',', '.') }} COP</p>
+                    </div>
 
-                        <!-- La ruta futura para reservar. Asumiendo que crearás una ruta como cliente.reservar -->
-                        <a href="{{ url('cliente/reservar/' . $espacio->espacio_id) }}" class="btn-reservar">Reservar ahora</a>
+                    <div class="reserva-actions-column">
+                        <div class="reserva-total-box">
+                            <div class="reserva-total-label">Precio por hora:</div>
+                            <div class="reserva-total-amount">${{ number_format($espacio->esp_precio_hora, 0, ',', '.') }}</div>
+                        </div>
+
+                        <a href="{{ route('cliente.reservar', $espacio->espacio_id) }}" class="btn-reservar">
+                            Reservar ahora →
+                        </a>
                     </div>
                 </div>
             @empty

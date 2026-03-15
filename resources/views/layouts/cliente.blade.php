@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ asset('css/cliente/cliente.css') }}">
 </head>
 <body>
@@ -25,8 +24,8 @@
     <ul class="menu">
       <!-- Usamos request()->routeIs() para iluminar el link actual -->
       <li><a href="{{ route('cliente.index') }}" class="{{ request()->routeIs('cliente.index') ? 'active' : '' }}">Inicio</a></li>
-      <li><a href="{{ route('cliente.buscar_espacios') }}" class="{{ request()->routeIs('cliente.buscar_espacios') ? 'active' : '' }}">Buscar espacios</a></li>
-      <li><a href="{{ route('cliente.mis_reservas') }}" class="{{ request()->routeIs('cliente.mis_reservas') ? 'active' : '' }}">Mis reservas</a></li>
+      <li><a href="{{ route('cliente.buscar_espacios') }}" class="{{ request()->routeIs('cliente.buscar_espacios', 'cliente.reservar') ? 'active' : '' }}">Buscar espacios</a></li>
+      <li><a href="{{ route('cliente.mis_reservas') }}" class="{{ request()->routeIs('cliente.mis_reservas', 'cliente.detalles_reserva') ? 'active' : '' }}">Mis reservas</a></li>
     </ul>
 
     <div class="nav-right">
@@ -38,27 +37,29 @@
           @forelse($notificaciones ?? [] as $reserva)
               <div class="notificacion {{ $reserva->rsva_estado }}">
                   @if ($reserva->rsva_estado == 'Aceptada')
-                      <strong>¡Reserva confirmada!</strong>
-                  @elseif ($reserva->rsva_estado == 'Rechazada')
-                      <strong>Reserva rechazada</strong>
-                  @else
-                      <strong>Actualización de reserva</strong>
+                      <strong>✅ ¡Reserva confirmada!</strong>
+                  @elseif ($reserva->rsva_estado == 'Rechazada' || $reserva->rsva_estado == 'Cancelada')
+                      <strong class="alert-error">❌ Reserva {{ strtolower($reserva->rsva_estado) }}</strong>
+                  @elseif ($reserva->rsva_estado == 'Pendiente')
+                      <strong class="alert-warning">⏳ Reserva en proceso</strong>
+                  @elseif ($reserva->rsva_estado == 'Finalizada')
+                      <strong>🌟 Reserva completada</strong>
                   @endif
 
                   <!-- Suponiendo que haces relaciones con Eloquent (Ej: $reserva->espacio->esp_nombre) -->
                   <p>Espacio: {{ $reserva->espacio->esp_nombre ?? 'N/D' }}</p>
-                  <p>Fecha: {{ \Carbon\Carbon::parse($reserva->rsva_fecha)->format('d M') }} de {{ \Carbon\Carbon::parse($reserva->rsva_hora_inicio)->format('g:i A') }} a {{ \Carbon\Carbon::parse($reserva->rsva_hora_fin)->format('g:i A') }}</p>
+                  <p class="notification-time">{{ \Carbon\Carbon::parse($reserva->rsva_fecha)->format('d M') }} de {{ \Carbon\Carbon::parse($reserva->rsva_hora_inicio)->format('g:i A') }} a {{ \Carbon\Carbon::parse($reserva->rsva_hora_fin)->format('g:i A') }}</p>
 
-                  @if ($reserva->rsva_estado == 'Aceptada')
-                      <button class='btn-ver' onclick="window.location.href='{{ route('cliente.mis_reservas') }}'">Ver detalles</button>
-                  @elseif ($reserva->rsva_estado == 'Rechazada')
+                  @if ($reserva->rsva_estado == 'Aceptada' || $reserva->rsva_estado == 'Pendiente')
+                      <button class='btn-ver btn-dark' onclick="window.location.href='{{ route('cliente.detalles_reserva', $reserva->reserva_id) }}'">Ver detalles</button>
+                  @elseif ($reserva->rsva_estado == 'Rechazada' || $reserva->rsva_estado == 'Cancelada')
                       <button class='btn-alternativa' onclick="window.location.href='{{ route('cliente.buscar_espacios') }}'">Buscar alternativa</button>
                   @else
-                      <button class='btn-reseña' onclick="window.location.href='{{ route('cliente.mis_reservas') }}'">Ver reserva</button>
+                      <button class='btn-reseña' onclick="window.location.href='{{ route('cliente.detalles_reserva', $reserva->reserva_id) }}'">Ver reserva</button>
                   @endif
               </div>
           @empty
-              <p style='text-align:center; color:#555;'>No tienes notificaciones recientes.</p>
+              <p class="text-center text-muted">No tienes notificaciones recientes.</p>
           @endforelse
 
         </div>
@@ -69,13 +70,13 @@
         <button class="perfil-btn" onclick="document.getElementById('menuPerfil').classList.toggle('show')">
           <img src="{{ asset('ASSETS/icon.webp') }}" alt="avatar" height="200px">
           <!-- Obteniendo datos del usuario autenticado en Laravel -->
-          <span>{{ auth()->user()->nombre ?? 'Usuario' }}</span>
+          <span>{{ auth()->user()->user_nombre ?? auth()->user()->name ?? 'Usuario' }}</span>
         </button>
         <ul class="dropdown-menu" name="menuPerfil" id="menuPerfil" hidden>
           <li><a href="{{ route('cliente.perfil') ?? '#' }}">Mi perfil</a></li>
           <li><a href="{{ route('cliente.mis_reservas') ?? '#' }}">Mis reservas</a></li>
           <li><a href="#">Ayuda y soporte</a></li>
-          <li class="cerrar"><a style="cursor: pointer;" onclick="openLogoutPopup()">Cerrar sesión</a></li>
+          <li class="cerrar"><a class="pointer" onclick="openLogoutPopup()">Cerrar sesión</a></li>
         </ul>
       </div>
     </div>
@@ -86,7 +87,7 @@
 <div id="logoutPopup" class="popup-overlay" style="display: none;">
   <div class="popup">
     <div class="popup-icon">
-      <img src="{{ asset('ASSETS/logout.svg') }}" alt="logout icon">
+      <img src="{{ asset('uploads/logout.svg') }}" alt="logout icon">
     </div>
     <h3>Cerrar sesión</h3>
     <p>¿Estás seguro de que quieres cerrar tu sesión?</p>
@@ -102,57 +103,53 @@
   </div>
 </div>
 
-<!-- ========================================== -->
-<!-- AQUÍ SE INYECTARÁ EL CONTENIDO DE LAS PÁGINAS -->
-<!-- ========================================== -->
 <main>
     @yield('content')
 </main>
 
-<script>
-  const btnNotificaciones = document.getElementById('btnNotificaciones');
-  const menuNotificaciones = document.getElementById('notificacionesMenu');
 
-  if(btnNotificaciones) {
-      btnNotificaciones.addEventListener('click', (e) => {
-        e.stopPropagation();
-        menuNotificaciones.style.display = menuNotificaciones.style.display === 'flex' ? 'none' : 'flex';
-      });
-  }
+<!-- MODAL DE CALIFICACIÓN -->
+<div id="modalCalificar" class="modal-overlay modal-hidden">
+  <div class="modal-container modal-small">
+    <div class="modal-header">
+      <h3>Califica tu experiencia</h3>
+      <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+    </div>
+    <div class="modal-content">
+      <p class="modal-description">Tu opinión es muy valiosa para nosotros y para otros usuarios.</p>
+      
+      <form id="formCalificar" action="{{ route('cliente.calificar') }}" method="POST">
+        @csrf
+        <input type="hidden" name="espacio_id" id="modal_espacio_id">
+        <input type="hidden" name="reserva_id" id="modal_reserva_id">
+        
+        <div class="form-group">
+          <label class="form-label">¿Qué te pareció el espacio?</label>
+          <div class="star-rating" id="modalStarRating">
+            <span class="star" data-rating="1">★</span>
+            <span class="star" data-rating="2">★</span>
+            <span class="star" data-rating="3">★</span>
+            <span class="star" data-rating="4">★</span>
+            <span class="star" data-rating="5">★</span>
+          </div>
+          <div class="rating-text" id="modalRatingText">5 de 5 estrellas</div>
+          <input type="hidden" name="calif_puntuacion" id="modal_puntuacion" value="5">
+        </div>
 
-  document.addEventListener('click', () => {
-    if(menuNotificaciones) menuNotificaciones.style.display = 'none';
-  });
+        <div class="form-group mt-20">
+          <label for="modal_calif_txt" class="form-label">Tu reseña</label>
+          <textarea name="calif_txt" id="modal_calif_txt" class="form-textarea" placeholder="Describe tu experiencia..." maxlength="1800" required></textarea>
+          <div class="char-count"><span id="modalCharCount">0</span> / 1800</div>
+        </div>
 
-  if(menuNotificaciones) {
-      menuNotificaciones.addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
-  }
+        <button type="submit" class="btn-submit-review">Publicar reseña</button>
+      </form>
+    </div>
+  </div>
+</div>
 
-  /* ==== POPUP LOGOUT ==== */
-  function openLogoutPopup() {
-    document.getElementById("logoutPopup").style.display = "flex";
-    const menuPerfil = document.getElementById("menuPerfil");
-    if(menuPerfil) {
-        menuPerfil.classList.remove("show");
-        menuPerfil.hidden = true;
-    }
-  }
 
-  function closeLogoutPopup() {
-    document.getElementById("logoutPopup").style.display = "none";
-  }
-
-  document.getElementById("logoutPopup").addEventListener("click", function(e) {
-    if (e.target === this) {
-      closeLogoutPopup();
-    }
-  });
-
-  // Nota: Ya no necesitamos el JS que lee la URL y marca el menú manual porque 
-  // Blade ahora lo hace al cargar usando el helper `request()->routeIs()`
-</script>
+<script src="{{ asset('js/cliente/global_cliente.js') }}"></script>
 
 <!-- Espacio para que las páginas inserten sus propios scripts -->
 @yield('scripts')
