@@ -47,7 +47,7 @@ class ClienteController extends Controller
 
     public function misReservas()
     {
-        $user_id = auth()->id() ?? 1; // Usar el ID del usuario autenticado
+        $user_id = auth()->id(); // Usar el ID del usuario autenticado
 
         $reservas = \App\Models\Reserva::where('user_id', $user_id)
             ->join('espacios', 'reserva.espacio_id', '=', 'espacios.espacio_id')
@@ -70,13 +70,13 @@ class ClienteController extends Controller
 
     public function perfil()
     {
-        $usuario = auth()->user() ?? \DB::table('usuarios')->where('user_id', 1)->first();
+        $usuario = auth()->user();
         return view('cliente.perfil', compact('usuario'));
     }
 
     public function actualizarPerfil(\Illuminate\Http\Request $request)
     {
-        $user_id = auth()->id() ?? 1;
+        $user_id = auth()->id();
 
         $request->validate([
             'nombre' => 'required|string|max:100',
@@ -109,7 +109,7 @@ class ClienteController extends Controller
 
     public function detallesReserva($id)
     {
-        $user_id = auth()->id() ?? 1;
+        $user_id = auth()->id();
 
         $reserva = \App\Models\Reserva::where('reserva_id', $id)
             ->where('user_id', $user_id)
@@ -141,7 +141,7 @@ class ClienteController extends Controller
 
     public function cancelarReserva(\Illuminate\Http\Request $request)
     {
-        $user_id = auth()->id() ?? 1;
+        $user_id = auth()->id();
         $reserva_id = $request->reserva_id;
 
         $reserva = \App\Models\Reserva::where('reserva_id', $reserva_id)
@@ -160,7 +160,7 @@ class ClienteController extends Controller
 
     public function calificarEspacio(\Illuminate\Http\Request $request)
     {
-        $user_id = auth()->id() ?? 1;
+        $user_id = auth()->id();
 
         $request->validate([
             'espacio_id' => 'required|integer',
@@ -301,7 +301,7 @@ class ClienteController extends Controller
 
         // Crear la reserva con Eloquent
         \App\Models\Reserva::create([
-            'user_id' => auth()->id() ?? 1,
+            'user_id' => auth()->id(),
             'espacio_id' => $request->espacio_id,
             'rsva_fecha' => $request->fecha,
             'rsva_hora_inicio' => $request->hora_inicio,

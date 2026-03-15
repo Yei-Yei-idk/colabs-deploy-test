@@ -70,11 +70,11 @@
         <button class="perfil-btn" onclick="document.getElementById('menuPerfil').classList.toggle('show')">
           <img src="{{ asset('ASSETS/icon.webp') }}" alt="avatar" height="200px">
           <!-- Obteniendo datos del usuario autenticado en Laravel -->
-          <span>{{ auth()->user()->user_nombre ?? auth()->user()->name ?? 'Usuario' }}</span>
+          <span>{{ auth()->user()->user_nombre }}</span>
         </button>
         <ul class="dropdown-menu" name="menuPerfil" id="menuPerfil" hidden>
-          <li><a href="{{ route('cliente.perfil') ?? '#' }}">Mi perfil</a></li>
-          <li><a href="{{ route('cliente.mis_reservas') ?? '#' }}">Mis reservas</a></li>
+          <li><a href="{{ route('cliente.perfil') }}">Mi perfil</a></li>
+          <li><a href="{{ route('cliente.mis_reservas') }}">Mis reservas</a></li>
           <li><a href="#">Ayuda y soporte</a></li>
           <li class="cerrar"><a class="pointer" onclick="openLogoutPopup()">Cerrar sesión</a></li>
         </ul>

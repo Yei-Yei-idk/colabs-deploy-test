@@ -38,8 +38,12 @@
             {{-- Derecha: botones de sesión --}}
             <div class="nav-right">
                 <div class="botones-sesion">
-                    <a href="{{ route('cliente.index') }}" class="btn-sesion registrarse">Registrarse</a>
-                    <a href="{{ route('cliente.index') }}" class="btn-sesion iniciar">Iniciar sesión</a>
+                    @guest
+                        <a href="{{ route('registrarse.mostrar') }}" class="btn-sesion registrarse">Registrarse</a>
+                        <a href="{{ route('login') }}" class="btn-sesion iniciar">Iniciar sesión</a>
+                    @else
+                        <a href="{{ route('cliente.index') }}" class="btn-sesion iniciar">Ir a tu panel</a>
+                    @endguest
                 </div>
             </div>
         </nav>

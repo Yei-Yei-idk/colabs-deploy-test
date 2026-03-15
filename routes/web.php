@@ -4,13 +4,23 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\InicioController;
+use App\Http\Controllers\Auth\RegistrarseController;
+use App\Http\Controllers\Auth\IniciarSesionController;
 
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
 Route::get('/nosotros', [InicioController::class, 'nosotros'])->name('nosotros');
 Route::get('/ubicacion', [InicioController::class, 'ubicacion'])->name('ubicacion');
 Route::get('/servicios', [InicioController::class, 'servicios'])->name('servicios');
 
-Route::prefix('cliente')->name('cliente.')->group(function () {
+// Registro de usuarios (equivalente a registrarse.php)
+Route::get('/registrarse', [RegistrarseController::class, 'mostrar'])->name('registrarse.mostrar');
+Route::post('/registrarse', [RegistrarseController::class, 'guardar'])->name('registrarse.guardar');
+
+// Inicio de sesión (equivalente a login.php)
+Route::get('/login', [IniciarSesionController::class, 'mostrarFormulario'])->name('login');
+Route::post('/login', [IniciarSesionController::class, 'autenticar'])->name('login.autenticar');
+
+Route::prefix('cliente')->name('cliente.')->middleware('auth')->group(function () {
     Route::get('/', [ClienteController::class, 'index'])->name('index');
     Route::get('/buscar', [ClienteController::class, 'buscarEspacios'])->name('buscar_espacios');
     Route::get('/reservas', [ClienteController::class, 'misReservas'])->name('mis_reservas');
