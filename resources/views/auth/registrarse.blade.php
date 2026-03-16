@@ -12,7 +12,7 @@
             @if (session('status'))
                 {{ session('status') }}
             @endif
-        </div>
+        </div>  
 
         {{-- Errores de validación --}}
         @if ($errors->any())
@@ -35,7 +35,6 @@
                 placeholder="Cédula"
                 class="mi-input"
                 value="{{ old('user_id') }}"
-                required
             >
             <br>
 
@@ -46,7 +45,7 @@
                 placeholder="Nombre"
                 class="mi-input"
                 value="{{ old('user_nombre') }}"
-                required
+
             >
             <br>
 
@@ -57,7 +56,6 @@
                 placeholder="Correo"
                 class="mi-input"
                 value="{{ old('user_correo') }}"
-                required
             >
             <br>
 
@@ -68,7 +66,6 @@
                 placeholder="Telefono"
                 class="mi-input"
                 value="{{ old('user_telefono') }}"
-                required
             >
             <br>
 
@@ -78,7 +75,6 @@
                 id="user_contrasena"
                 placeholder="Contraseña"
                 class="mi-input"
-                required
             >
             <br><br>
 
@@ -87,7 +83,6 @@
                 name="condiciones"
                 id="term_cond"
                 {{ old('condiciones') ? 'checked' : '' }}
-                required
             >
             <p>Al crear la cuenta aceptas nuestros términos y condiciones.</p>
 
@@ -96,25 +91,4 @@
     </div>
     </section>
 @endsection
-
-@push('scripts')
-    <script>
-        function snack(msg, redirect = null) {
-            let bar = document.getElementById("snackbar");
-            bar.innerHTML = msg;
-            bar.classList.add("show");
-
-            setTimeout(() => {
-                bar.classList.remove("show");
-                if (redirect) {
-                    window.location.href = redirect;
-                }
-            }, 3500);
-        }
-
-        @if (session('status'))
-            snack(@json(session('status')));
-        @endif
-    </script>
-@endpush
 

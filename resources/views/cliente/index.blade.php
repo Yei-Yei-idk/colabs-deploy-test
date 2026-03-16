@@ -4,6 +4,13 @@
 
 
 @section('content')
+    {{-- Mensaje de éxito tipo snackbar usando flash session --}}
+    <div id="snackbar">
+        @if (session('status'))
+            {{ session('status') }}
+        @endif
+    </div>
+
     <div class="hero">
         <div class="hero-text">
             <h2>Coworking en Barranquilla</h2>
@@ -82,4 +89,20 @@
 @section('scripts')
     <!-- Mueve tu JS a la carpeta public/js/cliente/ y cárgalo con asset() -->
     <script src="{{ asset('js/cliente/esp_destacados.js') }}"></script>
+
+    <script>
+        function snack(msg) {
+            let bar = document.getElementById("snackbar");
+            bar.innerHTML = msg;
+            bar.classList.add("show");
+
+            setTimeout(() => {
+                bar.classList.remove("show");
+            }, 3500);
+        }
+
+        @if (session('status'))
+            snack(@json(session('status')));
+        @endif
+    </script>
 @endsection

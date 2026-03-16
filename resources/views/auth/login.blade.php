@@ -9,7 +9,9 @@
 
             {{-- Snackbar container --}}
             <div id="snackbar">
-                @if (session('mensaje_login'))
+                @if (session('status'))
+                    {{ session('status') }}
+                @elseif (session('mensaje_login'))
                     {{ session('mensaje_login') }}
                 @endif
             </div>
@@ -34,7 +36,7 @@
                     placeholder="Documento o Correo"
                     class="mi-input"
                     value="{{ old('user') }}"
-                    required
+                    
                 >
                 <br>
 
@@ -43,7 +45,7 @@
                     name="contra"
                     placeholder="Contraseña"
                     class="mi-input"
-                    required
+                    
                 >
                 <br><br>
 
@@ -72,9 +74,11 @@
             }, 3500);
         }
 
-        @if (session('mensaje_login'))
-            snack(@json(session('mensaje_login')));
-        @endif
+        if (session('status'))
+            snack(json(session('status')));
+        
+        if (session('mensaje_login'))
+            snack(json(session('mensaje_login')));
     </script>
 @endpush
 
