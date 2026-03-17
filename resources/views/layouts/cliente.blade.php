@@ -87,7 +87,7 @@
 <div id="logoutPopup" class="popup-overlay" style="display: none;">
   <div class="popup">
     <div class="popup-icon">
-      <img src="{{ asset('uploads/logout.svg') }}" alt="logout icon">
+      <img src="{{ asset('/ASSETS/logout.svg') }}" alt="logout icon">
     </div>
     <h3>Cerrar sesión</h3>
     <p>¿Estás seguro de que quieres cerrar tu sesión?</p>
