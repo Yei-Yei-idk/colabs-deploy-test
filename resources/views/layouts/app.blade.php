@@ -42,7 +42,11 @@
                         <a href="{{ route('registrarse.mostrar') }}" class="btn-sesion registrarse">Registrarse</a>
                         <a href="{{ route('login') }}" class="btn-sesion iniciar">Iniciar sesión</a>
                     @else
-                        <a href="{{ route('cliente.index') }}" class="btn-sesion iniciar">Ir a tu panel</a>
+                        @if(in_array(auth()->user()->rol_id, [1, 2]))
+                            <a href="{{ route('admin.dashboard') }}" class="btn-sesion iniciar">Ir a tu panel</a>
+                        @else
+                            <a href="{{ route('cliente.index') }}" class="btn-sesion iniciar">Ir a tu panel</a>
+                        @endif
                     @endguest
                 </div>
             </div>

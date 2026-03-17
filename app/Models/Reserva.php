@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Reserva extends Model
 {
@@ -24,5 +25,10 @@ class Reserva extends Model
     public function espacio()
     {
         return $this->belongsTo(Espacio::class, 'espacio_id', 'espacio_id');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 }

@@ -64,9 +64,9 @@ class IniciarSesionController extends Controller
                 return redirect()->route('cliente.index')->with('status', '👋 ¡Bienvenido de nuevo!');
 
             case 1:
+            case 2:
                 // Administrador / Super usuario
-                // TODO: Cambiar a la ruta real del dashboard cuando exista
-                return redirect()->route('inicio')->with('status', '👋 ¡Bienvenido, Administrador!');
+                return redirect()->route('admin.dashboard')->with('status', '👋 ¡Bienvenido al panel de control!');
         }
 
         Auth::logout();

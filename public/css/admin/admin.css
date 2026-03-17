@@ -1,0 +1,1207 @@
+/* ==================== */
+/* RESET + BASE         */
+/* ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  display: flex;
+  background: #f9fafb;
+  color: #333;
+  height: 100vh;
+}
+
+/* Evitar que los enlaces se vean azules por defecto */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ==================== */
+/* SIDEBAR              */
+/* ==================== */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  padding: 20px;
+  background: #fff;
+  border-right: 1px solid #eee;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.sidebar nav ul,
+.sidebar .admin-section ul {
+  list-style: none;
+}
+
+.sidebar nav ul li,
+.sidebar .admin-section ul li {
+  padding: 0; /* Quitamos el padding del li */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 4px;
+}
+
+.sidebar nav ul li a,
+.sidebar .admin-section ul li a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  width: 100%;
+}
+
+.sidebar nav ul li.active,
+.sidebar nav ul li:hover {
+  background: #facc15;
+}
+
+.sidebar nav ul li.active a,
+.sidebar nav ul li:hover a {
+  color: #000;
+  font-weight: 600;
+}
+
+/* ==================== */
+/* MAIN WRAPPER         */
+/* ==================== */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ==================== */
+/* HEADER (TOPBAR)      */
+/* ==================== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 15px 30px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.header .left {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.header .right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header .right span {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ==================== */
+/* CONTENT              */
+/* ==================== */
+.content {
+  flex: 1;
+  padding: 20px 30px;
+  overflow-y: auto;
+}
+
+/* ==================== */
+/* DASHBOARD STATS      */
+/* ==================== */
+.stats {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.stats .card {
+  width: 150px;
+  height: auto;
+  padding: 20px;
+  text-align: center;
+
+  background: #000;
+  color: #fff;
+  border-radius: 8px;
+
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.stats .card small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* ==================== */
+/* FILTERS              */
+/* ==================== */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.filters select,
+.filters input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+
+.new-btn {
+  margin-left: auto;
+  padding: 10px 15px;
+
+  background: #facc15;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.new-btn:hover {
+  background: #eab308;
+}
+
+/* ==================== */
+/* TABLE                */
+/* ==================== */
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background: #f9fafb;
+  text-align: left;
+}
+
+th,
+td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.status {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.status.active {
+  background: #22c55e;
+}
+
+.status.inactive {
+  background: #ef4444;
+}
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* ==================== */
+/* RESERVAS             */
+/* ==================== */
+
+/* Contenedor de calendario */
+.reserva-calendario {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 350px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Header calendario */
+.calendario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.calendario-header .mes-ano {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.calendario-header button {
+  background: #facc15;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Días de la semana */
+.dias-semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* Días del mes */
+.dias-mes {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  gap: 5px;
+}
+
+.dia {
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.dia:hover {
+  background: #fef3c7;
+}
+
+.dia.ocupado {
+  background: #ef4444;
+  color: #fff;
+}
+
+.dia.disponible {
+  background: #22c55e;
+  color: #fff;
+}
+
+/* Contenedor de horas */
+.reserva-listado {
+  margin-top: 20px;
+}
+
+.reserva-listado h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.reserva-listado ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reserva-listado li {
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Disponibilidad */
+.reserva-listado li.ocupado {
+  background-color: #ef4444;
+}
+
+.reserva-listado li.disponible {
+  background-color: #22c55e;
+}
+
+/* Botón solicitudes */
+.btn-solicitudes {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: #facc15;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-solicitudes:hover {
+  background-color: #e6b800;
+  transform: scale(1.05);
+}
+
+/* ==================== */
+/* SECCIONES NUEVAS      */
+/* ==================== */
+
+/* Gestión de usuarios */
+.usuarios-listado {
+  margin-top: 20px;
+}
+
+.usuarios-listado table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.usuarios-listado th,
+.usuarios-listado td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  text-align: left;
+}
+
+.usuarios-listado th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.usuarios-listado tr:hover {
+  background-color: #fef3c7;
+}
+
+.usuarios-listado .btn-principal {
+  margin-top: 15px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #facc15;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.usuarios-listado .btn-principal:hover {
+  background-color: #e6b800;
+  transform: scale(1.05);
+}
+
+/* Botones de acciones dentro de la tabla */
+.usuarios-listado td span {
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.usuarios-listado td span:hover {
+  transform: scale(1.2);
+  color: #facc15;
+}
+
+/* ==================== */
+/* BOTONES ADICIONALES  */
+/* ==================== */
+.delet-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.delet-btn:hover {
+  background: #dc2626;
+}
+
+/* ================================
+   FORMULARIO NUEVO ESPACIO
+================================ */
+
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.radio-option:hover {
+  background: #f8f9fa;
+  border-color: #3b82f6;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: #3b82f6;
+}
+
+.radio-content {
+  flex: 1;
+}
+
+.radio-content .title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.radio-content .description {
+  font-size: 13px;
+  color: #666;
+}
+
+.aforo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.aforo-container input {
+  width: 80px;
+  text-align: center;
+}
+
+.form-confirmation {
+  text-align: center;
+  margin: 30px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.form-confirmation p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.btn-crear {
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  padding: 15px 30px;
+  background: #facc15;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-crear:hover {
+  background: #eab308;
+  transform: scale(1.02);
+}
+
+/* ================================
+   Botones ASIDE
+================================ */
+.btn-asides {
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  padding: 15px 30px;
+  background: #facc15;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-asides:hover {
+  background: #eab308;
+  transform: scale(1.02);
+}
+
+/* ================================
+   DASHBOARD
+================================ */
+.dashboard-stats {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.dashboard-stats .card {
+  width: 180px;
+}
+
+.ultimas-reservas {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ultimas-reservas h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.reservas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reservas-table th,
+.reservas-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.reservas-table th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.estado-reserva {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.estado-reserva.confirmada {
+  color: #22c55e;
+}
+
+.estado-reserva.ocupada {
+  color: #ef4444;
+}
+
+.estado-reserva::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ================================
+   GESTIÓN DE USUARIOS
+================================ */
+.usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.usuarios-table th,
+.usuarios-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.usuarios-table th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.usuarios-table tr:hover {
+  background: #fef3c7;
+}
+
+.btn-agregar-admin {
+  background: #facc15;
+  color: #000;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-agregar-admin:hover {
+  background: #eab308;
+  transform: scale(1.05);
+}
+
+.accion-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: 0.2s;
+}
+
+.accion-btn:hover {
+  transform: scale(1.2);
+  color: #facc15;
+}
+
+/* ================================
+   COPIAS DE SEGURIDAD
+================================ */
+.backup-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.backup-header {
+  margin-bottom: 30px;
+}
+
+.backup-header h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.backup-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.backup-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.backup-btn {
+  background: #facc15;
+  color: #000;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.backup-btn:hover {
+  background: #eab308;
+  transform: scale(1.05);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter: blur(2.5px);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1;
+}
+
+.confirmar_carga_creacion {
+  color: #000;
+  position: absolute;
+  text-align: center;
+  margin-left: 40%;
+  margin-top: 240px;
+  padding: 15px 25px;
+  max-width: 500px;
+  border: 5px solid #000000;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px;
+  background-color: #eab308;
+  z-index: 3;
+}
+
+.button_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-confirmar {
+  background: #000000;
+  color: #facc15;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-confirmar:hover {
+  transform: scale(1.05);
+}
+
+.copia_cargada_creada {
+  color: #000;
+  position: absolute;
+  text-align: center;
+  margin-left: 42%;
+  margin-top: 240px;
+  padding: 15px 25px;
+  max-width: 500px;
+  border: 5px solid #000000;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px;
+  background-color: #eab308;
+  z-index: 3;
+}
+
+/* ================================
+   Registrar
+================================ */
+.formulario {
+  text-align: center;
+  margin-left: 50px;
+  padding: 10px 0 10px 0;
+  max-width: 500px;
+  border: 5px solid #eab308;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px;
+  background-color: white;
+}
+
+.mi-input {
+  height: 35px;
+  width: 330px;
+  margin-bottom: 1px;
+  margin-top: 20px;
+  border-radius: 15px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.mi-input::placeholder {
+  font-size: 20px;
+  text-align: center;
+}
+
+.btn-login {
+  width: 200px;
+  height: 50px;
+  font-size: 25px;
+  background-color: #e6b800;
+  border-radius: 15px;
+  transition: 0.5s;
+  box-shadow: 0 4px 6px;
+  margin-bottom: 25px;
+}
+
+.btn-login:hover {
+  transform: scale(1.05);
+}
+
+.container-formulario-registrar {
+  text-align: center;
+  margin-top: 100px;
+  margin-left: 550px;
+  width: 600px;
+  height: auto;
+}
+
+/* ================================
+  Solicitudes pendientes
+================================ */
+
+.container-principal-solicitudes {
+  width: 60%;
+  height: fit-content;
+  margin-left: 5%;
+  overflow: hidden;
+}
+
+.solicitud-pendiente {
+  width: 125px;
+  padding: 5px;
+  height: auto;
+  color: #eab308;
+  background-color: black;
+  margin-left: 85%;
+  border: 2.5px solid #eab308;
+  border-radius: 8px;
+  margin-top: 0px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.container-nombres-correo-solicitudes {
+  margin-top: -25px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px;
+}
+
+.container-nombres-correo-solicitudes h2,
+.container-nombres-correo-solicitudes p {
+  margin: 0;
+  padding: 0;
+}
+
+.container-secundario-solicitudes h3 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.container-btn-solicitud {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
+}
+
+.btn-solicitudes-aceptar,
+.btn-solicitudes-rechazar {
+  margin-top: -20px;
+}
+
+.container-secundario-solicitudes {
+  flex: 0 0 calc((100% - 40px) / 3);
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.container-secundario-solicitudes h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.container-secundario-solicitudes {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.container-secundario-solicitudes:hover {
+  transition: all 0.2s;
+  overflow: hidden;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar nav ul > li:has(details):hover {
+  background: transparent;
+  color: inherit;
+  font-weight: normal;
+}
+
+.sidebar details summary:hover {
+  background: #facc15;
+  color: #000000;
+  font-weight: 600;
+}
+
+.sidebar details .submenu li:hover {
+  background: #facc15;
+  color: #000000;
+  font-weight: 600;
+  transform: translateX(5px);
+}
+
+.btn-solicitudes-aceptar {
+  background-color: #008000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-solicitudes-rechazar {
+  background-color: #b30000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* ================================
+   Reservas finalizadas
+================================ */
+
+.container-principal-reservas-finalizadas {
+  width: 60%;
+  height: fit-content;
+  margin-left: 5%;
+  overflow: hidden;
+}
+
+.reservas-finalizadas {
+  width: 125px;
+  padding: 5px;
+  height: auto;
+  color: #eab308;
+  background-color: black;
+  margin-left: 85%;
+  border: 2.5px solid #eab308;
+  border-radius: 8px;
+  margin-top: 0px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.container-nombres-correo-reservas-finalizadas {
+  margin-top: -25px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px;
+}
+
+.container-nombres-correo-reservas-finalizadas h2,
+.container-nombres-correo-reservas-finalizadas p {
+  margin: 0;
+  padding: 0;
+}
+
+.container-secundario-reservas-finalizadas h3 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.container-secundario-reservas-finalizadas {
+  flex: 0 0 calc((100% - 40px) / 3);
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.container-secundario-reservas-finalizadas h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.container-secundario-reservas-finalizadas {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.container-secundario-reservas-finalizadas:hover {
+  transition: all 0.2s;
+  overflow: hidden;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ================================
+   Navegación de fechas
+================================ */
+.navegacion-fechas {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.btn-nav {
+  background: #facc15;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.btn-nav:hover {
+  background: #000000;
+}
+
+.input-fecha {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f7f7f7;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-fecha:hover,
+.input-fecha:focus {
+  border-color: #facc15;
+  background: rgb(255, 255, 255);
+  box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+}
+
+/* ================================
+   Snackbar global
+================================ */
+#snackbar {
+  visibility: hidden;
+  min-width: 240px;
+  background: #323232;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  border-radius: 8px;
+
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  z-index: 9999;
+
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  font-family: Inter, sans-serif;
+}
+
+#snackbar.show {
+  visibility: visible;
+  opacity: 1;
+}

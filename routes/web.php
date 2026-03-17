@@ -6,6 +6,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\Auth\RegistrarseController;
 use App\Http\Controllers\Auth\IniciarSesionController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
 Route::get('/nosotros', [InicioController::class, 'nosotros'])->name('nosotros');
@@ -40,3 +41,21 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
     $request->session()->regenerateToken();
     return redirect('/');
 })->name('logout');
+
+// ===================== PANEL ADMIN / SUPER-ADMIN =====================
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'es.administrador'])
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Los siguientes controladores se irán creando en las próximas migraciones:
+        Route::get('/espacios',             fn() => 'próximamente')->name('espacios.index');
+        Route::get('/reservas',             fn() => 'próximamente')->name('reservas.index');
+        Route::get('/reservas/pendientes',  fn() => 'próximamente')->name('reservas.pendientes');
+        Route::get('/reservas/finalizadas', fn() => 'próximamente')->name('reservas.finalizadas');
+        Route::get('/backup',               fn() => 'próximamente')->name('backup.index');
+        Route::get('/usuarios',             fn() => 'próximamente')->name('usuarios.index');
+    });
