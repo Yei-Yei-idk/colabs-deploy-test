@@ -396,32 +396,7 @@ footer a:hover { text-decoration: underline; }
   box-shadow: 0 8px 18px rgba(250,204,21,.3);
 }
 
-#snackbar {
-  visibility: hidden;
-  min-width: 260px;
-  background: #111827;
-  color: #f9fafb;
-  text-align: left;
-  padding: 12px 16px;
-  border-radius: 12px;
-  position: fixed;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%);
-  font-size: .9rem;
-  opacity: 0;
-  transition: opacity .4s, bottom .4s, transform .4s;
-  z-index: 9999;
-  border: 1px solid rgba(148,163,184,.6);
-  box-shadow: 0 14px 30px rgba(0,0,0,.55);
-}
-
-#snackbar.show {
-  visibility: visible;
-  opacity: 1;
-  bottom: 34px;
-  transform: translateX(-50%) translateY(-2px);
-}
+/* SNACKBAR ESTILOS MOVIDOS/ELIMINADOS PARA UNIFICAR ABAJO */
 
 @media (max-width: 600px) {
   .auth-registrarse {
@@ -562,11 +537,11 @@ footer a:hover { text-decoration: underline; }
   border-radius: 12px;
   position: fixed;
   left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%);
+  bottom: 40px;
+  transform: translateX(-50%) translateY(50px);
   font-size: .9rem;
   opacity: 0;
-  transition: opacity .4s, bottom .4s, transform .4s;
+  transition: opacity .5s ease, transform .5s ease, visibility .5s;
   z-index: 9999;
   border: 1px solid rgba(148,163,184,.6);
   box-shadow: 0 14px 30px rgba(0,0,0,.55);
@@ -575,8 +550,7 @@ footer a:hover { text-decoration: underline; }
 #snackbar.show {
   visibility: visible;
   opacity: 1;
-  bottom: 34px;
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateX(-50%) translateY(0);
 }
 
 @media (max-width: 600px) {

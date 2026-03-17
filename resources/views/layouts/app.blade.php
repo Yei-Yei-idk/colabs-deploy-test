@@ -59,6 +59,25 @@
         <p>&copy; {{ date('Y') }} Colabs. Todos los derechos reservados.</p>
     </footer>
 
+    {{-- Snackbar Global --}}
+    <div id="snackbar"></div>
+
+    <script>
+        function snack(msg) {
+            let bar = document.getElementById("snackbar");
+            if (!bar) return;
+            bar.innerHTML = msg;
+            bar.classList.add("show");
+            setTimeout(() => {
+                bar.classList.remove("show");
+            }, 3500);
+        }
+
+        @if (session('status'))
+            snack("{{ session('status') }}");
+        @endif
+    </script>
+
     @stack('scripts')
 </body>
 </html>

@@ -149,10 +149,27 @@
 </div>
 
 
-<script src="{{ asset('js/cliente/global_cliente.js') }}"></script>
+{{-- Snackbar Global --}}
+    <div id="snackbar"></div>
 
-<!-- Espacio para que las páginas inserten sus propios scripts -->
-@yield('scripts')
+    <script>
+        function snack(msg) {
+            let bar = document.getElementById("snackbar");
+            if (!bar) return;
+            bar.innerHTML = msg;
+            bar.classList.add("show");
+            setTimeout(() => {
+                bar.classList.remove("show");
+            }, 3500);
+        }
 
+        @if (session('status'))
+            snack("{{ session('status') }}");
+        @endif
+  </script>
+
+    <script src="{{ asset('js/cliente/global_cliente.js') }}"></script>
+  
+    @yield('scripts')
 </body>
 </html>

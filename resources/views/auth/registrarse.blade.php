@@ -7,13 +7,6 @@
     <div class="formulario">
         <h1>Registrarse</h1>
 
-        {{-- Mensaje de éxito tipo snackbar usando flash session --}}
-        <div id="snackbar">
-            @if (session('status'))
-                {{ session('status') }}
-            @endif
-        </div>  
-
         {{-- Errores de validación --}}
         @if ($errors->any())
             <div class="errores">

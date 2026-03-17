@@ -4,14 +4,8 @@
 
 
 @section('content')
-    {{-- Mensaje de éxito tipo snackbar usando flash session --}}
-    <div id="snackbar">
-        @if (session('status'))
-            {{ session('status') }}
-        @endif
-    </div>
 
-    <div class="hero">
+    <div class="hero animate-fade-up">
         <div class="hero-text">
             <h2>Coworking en Barranquilla</h2>
             <p>En COLABS encuentras oficinas modernas, escritorios compartidos y espacios para reuniones, todo en un
@@ -33,9 +27,9 @@
         <div class="hero-img"></div>
     </div>
     
-    <h2 id="subtitulo_espacios" class="mis-reservas-header mt-20 mb-20">Espacios Destacados</h2>
+    <h2 id="subtitulo_espacios" class="mis-reservas-header mt-20 mb-20 animate-fade-up" style="animation-delay: 0.2s;">Espacios Destacados</h2>
     
-    <div class="slider-container">
+    <div class="slider-container animate-fade-up" style="animation-delay: 0.4s;">
         <button class="prev">‹</button>
         <div class="slider-wrapper">
             <div class="slider">
@@ -87,22 +81,5 @@
 @endsection
 
 @section('scripts')
-    <!-- Mueve tu JS a la carpeta public/js/cliente/ y cárgalo con asset() -->
     <script src="{{ asset('js/cliente/esp_destacados.js') }}"></script>
-
-    <script>
-        function snack(msg) {
-            let bar = document.getElementById("snackbar");
-            bar.innerHTML = msg;
-            bar.classList.add("show");
-
-            setTimeout(() => {
-                bar.classList.remove("show");
-            }, 3500);
-        }
-
-        @if (session('status'))
-            snack(@json(session('status')));
-        @endif
-    </script>
 @endsection

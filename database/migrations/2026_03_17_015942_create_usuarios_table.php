@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('usuarios', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+        Schema::create('usuarios', function (Blueprint $table) {
             $table->string('user_id')->primary();
+            $table->string('user_nombre');
+            $table->string('user_correo')->unique();
+            $table->bigInteger('user_telefono');
+            $table->string('user_contrasena');
+            $table->integer('rol_id')->index('rol_id');
+
         });
     }
 
@@ -22,9 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('usuarios', function (Blueprint $table) {
-            $table->dropColumn('user_id');
-            $table->integer('user_id', true);
-        });
+        Schema::dropIfExists('usuarios');
     }
 };

@@ -25,6 +25,9 @@ class IniciarSesionController extends Controller
         $request->validate([
             'user'   => ['required', 'string'],
             'contra' => ['required', 'string'],
+        ], [
+            'user.required'   => 'El documento o correo es obligatorio.',
+            'contra.required' => 'La contraseña es obligatoria.',
         ]);
 
         $loginInput = $request->input('user');
@@ -38,7 +41,7 @@ class IniciarSesionController extends Controller
         if (! $usuario) {
             return back()
                 ->withInput($request->only('user'))
-                ->with('mensaje_login', '❌ Usuario no encontrado');
+                ->withErrors(['user' => 'Usuario no encontrado']);
         }
 
         // Intentar autenticar usando el correo del usuario y la contraseña proporcionada.
@@ -49,7 +52,7 @@ class IniciarSesionController extends Controller
         ], false)) {
             return back()
                 ->withInput($request->only('user'))
-                ->with('mensaje_login', '❌ Usuario o contraseña incorrectos');
+                ->withErrors(['user' => 'Usuario o contraseña incorrectos']);
         }
 
         $request->session()->regenerate();
@@ -58,19 +61,19 @@ class IniciarSesionController extends Controller
         switch ($usuario->rol_id) {
             case 3:
                 // Cliente
-                return redirect()->route('cliente.index');
+                return redirect()->route('cliente.index')->with('status', '👋 ¡Bienvenido de nuevo!');
 
             case 1:
                 // Administrador / Super usuario
                 // TODO: Cambiar a la ruta real del dashboard cuando exista
-                return redirect()->route('inicio');
+                return redirect()->route('inicio')->with('status', '👋 ¡Bienvenido, Administrador!');
         }
 
         Auth::logout();
 
         return back()
             ->withInput($request->only('user'))
-            ->with('mensaje_login', '⚠️ Rol no reconocido');
+            ->withErrors(['user' => '⚠️ Rol no reconocido']);
     }
 }
 

@@ -15,8 +15,9 @@ return new class extends Migration
             $table->integer('calif_id', true);
             $table->text('calif_txt');
             $table->integer('calif_puntuacion');
-            $table->integer('user_id')->index('user_id');
+            $table->string('user_id')->index('user_id');
             $table->integer('espacio_id')->index('espacio_id');
+            $table->integer('reserva_id')->nullable();
         });
     }
 

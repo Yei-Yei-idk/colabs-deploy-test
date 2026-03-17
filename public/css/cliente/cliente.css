@@ -49,15 +49,26 @@
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-6px)
-  }
-
   to {
     opacity: 1;
     transform: none
   }
+}
+
+@keyframes fadeUp50 {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeUp50 0.8s ease forwards;
 }
 
 @keyframes pulse {
@@ -2723,4 +2734,31 @@ nav img {
   .booking-confirm-btn {
     width: 100%;
   }
+}
+
+/* ─────────────── SNACKBAR GLOBAL ─────────────── */
+#snackbar {
+  visibility: hidden;
+  min-width: 260px;
+  background: #111827;
+  color: #f9fafb;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 12px;
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(50px);
+  font-size: .9rem;
+  opacity: 0;
+  transition: opacity .5s ease, transform .5s ease, visibility .5s;
+  z-index: 9999;
+  border: 1px solid rgba(148,163,184,.6);
+  box-shadow: 0 14px 30px rgba(0,0,0,.55);
+}
+
+#snackbar.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
