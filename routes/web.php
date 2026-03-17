@@ -22,7 +22,7 @@ Route::post('/registrarse', [RegistrarseController::class, 'guardar'])->name('re
 Route::get('/login', [IniciarSesionController::class, 'mostrarFormulario'])->name('login');
 Route::post('/login', [IniciarSesionController::class, 'autenticar'])->name('login.autenticar');
 
-Route::prefix('cliente')->name('cliente.')->middleware('auth')->group(function () {
+Route::prefix('cliente')->name('cliente.')->middleware(['auth', 'es.cliente'])->group(function () {
     Route::get('/', [ClienteController::class, 'index'])->name('index');
     Route::get('/buscar', [ClienteController::class, 'buscarEspacios'])->name('buscar_espacios');
     Route::get('/reservas', [ClienteController::class, 'misReservas'])->name('mis_reservas');
