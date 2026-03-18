@@ -77,9 +77,9 @@
             }, 3500);
         }
 
-        @if (session('status'))
+        if (session('status'))
             snack("{{ session('status') }}");
-        @endif
+        endif
     </script>
 
     @stack('scripts')

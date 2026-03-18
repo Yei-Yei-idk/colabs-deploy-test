@@ -9,6 +9,9 @@ use App\Http\Controllers\Auth\IniciarSesionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EspaciosController;
 use App\Http\Controllers\Admin\ReservasController;
+use App\Http\Controllers\Admin\BackupController;
+
+// ===================== RUTAS =====================
 
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
 Route::get('/nosotros', [InicioController::class, 'nosotros'])->name('nosotros');
@@ -64,6 +67,6 @@ Route::prefix('admin')
         Route::get('/reservas',             [ReservasController::class, 'index'])->name('reservas.index');
         Route::get('/reservas/pendientes',  [ReservasController::class, 'pendientes'])->name('reservas.pendientes');
         Route::get('/reservas/finalizadas', [ReservasController::class, 'finalizadas'])->name('reservas.finalizadas');
-        Route::get('/backup',               fn() => 'próximamente')->name('backup.index');
+        Route::get('/copia-seguridad', [BackupController::class, 'menu'])->name('copia_seguridad.menu');
         Route::get('/usuarios',             fn() => 'próximamente')->name('usuarios.index');
     });

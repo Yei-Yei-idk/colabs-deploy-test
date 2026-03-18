@@ -50,8 +50,8 @@
                 </details>
             </li>
 
-            <li class="{{ request()->routeIs('admin.backup*') ? 'active' : '' }}">
-                <a href="{{ route('admin.backup.index') }}">Copias de seguridad</a>
+            <li class="{{ request()->routeIs('admin.copia_seguridad.menu') ? 'active' : '' }}">
+                <a href="{{ route('admin.copia_seguridad.menu') }}">Copias de seguridad</a>
             </li>
 
             {{-- Solo visible para SuperAdmin (rol_id = 1) --}}
