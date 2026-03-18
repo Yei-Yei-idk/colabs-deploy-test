@@ -43,18 +43,27 @@ header {
 }
 header:hover { box-shadow: 0 4px 20px rgba(250,204,21,.15); }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #fff;
+/* =========================================
+   Centrado del Menú de Navegación
+   ========================================= */
+header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Asegura que el nav ocupe el ancho completo si es necesario */
+    width: 100%; 
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+header nav .menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    flex: 1; /* Ocupa todo el espacio disponible entre el logo y los botones */
+    gap: 20px; /* Espacio entre los items del menú */
+    margin: 0 20px; /* Margen de seguridad lateral */
 }
+
 .logo {
   font-size: 18px;
   font-weight: 700;
