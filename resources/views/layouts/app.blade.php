@@ -28,14 +28,15 @@
                 <a href="{{ route('inicio') }}" class="logo">
                     <img src="{{ asset('ASSETS/logo.png') }}" alt="Colabs">
                 </a>
-                <ul class="menu">
-                    <li><a href="{{ route('inicio') }}"
-                           class="{{ request()->routeIs('inicio') ? 'active' : '' }}">Inicio</a></li>
-                    <li><a href="{{ route('nosotros') }}" class="{{ request()->routeIs('nosotros') ? 'active' : '' }}">Nosotros</a></li>
-                    <li><a href="{{ route('ubicacion') }}" class="{{ request()->routeIs('ubicacion') ? 'active' : '' }}">Encuéntranos</a></li>
-                    <li><a href="{{ route('servicios') }}" class="{{ request()->routeIs('servicios') ? 'active' : '' }}">Servicios</a></li>
-                </ul>
             </div>
+
+            {{-- Menú centrado --}}
+            <ul class="menu">
+                <li><a href="{{ route('inicio') }}" class="{{ request()->routeIs('inicio') ? 'active' : '' }}">Inicio</a></li>
+                <li><a href="{{ route('nosotros') }}" class="{{ request()->routeIs('nosotros') ? 'active' : '' }}">Nosotros</a></li>
+                <li><a href="{{ route('ubicacion') }}" class="{{ request()->routeIs('ubicacion') ? 'active' : '' }}">Encuéntranos</a></li>
+                <li><a href="{{ route('servicios') }}" class="{{ request()->routeIs('servicios') ? 'active' : '' }}">Servicios</a></li>
+            </ul>
  
             {{-- Derecha: botones de sesión --}}
             <div class="nav-right">
