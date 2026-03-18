@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegistrarseController;
 use App\Http\Controllers\Auth\IniciarSesionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EspaciosController;
+use App\Http\Controllers\Admin\ReservasController;
 
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
 Route::get('/nosotros', [InicioController::class, 'nosotros'])->name('nosotros');
@@ -60,9 +61,9 @@ Route::prefix('admin')
         Route::post('/espacios/{id}/toggle', [EspaciosController::class, 'toggleStatus'])->name('espacios.toggle');
 
         // Los siguientes controladores se irán creando en las próximas migraciones:
-        Route::get('/reservas',             fn() => 'próximamente')->name('reservas.index');
-        Route::get('/reservas/pendientes',  fn() => 'próximamente')->name('reservas.pendientes');
-        Route::get('/reservas/finalizadas', fn() => 'próximamente')->name('reservas.finalizadas');
+        Route::get('/reservas',             [ReservasController::class, 'index'])->name('reservas.index');
+        Route::get('/reservas/pendientes',  [ReservasController::class, 'pendientes'])->name('reservas.pendientes');
+        Route::get('/reservas/finalizadas', [ReservasController::class, 'finalizadas'])->name('reservas.finalizadas');
         Route::get('/backup',               fn() => 'próximamente')->name('backup.index');
         Route::get('/usuarios',             fn() => 'próximamente')->name('usuarios.index');
     });
