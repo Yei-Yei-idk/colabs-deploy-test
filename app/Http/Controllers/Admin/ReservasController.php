@@ -16,9 +16,10 @@ class ReservasController extends Controller
      */
     public function index(Request $request)
     {
+        Carbon::setLocale('es');
         // Manejo de fecha con Carbon (reemplaza strtotime + date())
         $fechaInput = $request->get('fecha', Carbon::today()->format('Y-m-d'));
-        $fecha      = Carbon::parse($fechaInput);
+        $fecha      = Carbon::parse($fechaInput)->locale('es');
 
         $fechaAnterior  = $fecha->copy()->subDay()->format('Y-m-d');
         $fechaSiguiente = $fecha->copy()->addDay()->format('Y-m-d');
@@ -48,6 +49,7 @@ class ReservasController extends Controller
      */
     public function pendientes()
     {
+        Carbon::setLocale('es');
         $reservas = Reserva::with(['espacio', 'usuario'])
             ->whereIn('rsva_estado', ['Pendiente', 'pendiente'])
             ->orderBy('rsva_fecha', 'asc')
@@ -62,11 +64,30 @@ class ReservasController extends Controller
      */
     public function finalizadas()
     {
+        Carbon::setLocale('es');
         $reservas = Reserva::with(['espacio', 'usuario'])
             ->whereIn('rsva_estado', ['Finalizada', 'finalizada'])
             ->orderBy('rsva_fecha', 'desc')
             ->get();
 
         return view('admin.reservas.finalizadas', compact('reservas'));
+    }
+
+    /**
+     * Actualiza el estado de una reserva (Aceptada/Rechazada).
+     * Reemplaza a nuevo_estado.php
+     */
+    public function actualizarEstado(Request $request)
+    {
+        $request->validate([
+            'reserva_id' => 'required|exists:reserva,reserva_id',
+            'nuevo_estado' => 'required|string'
+        ]);
+
+        $reserva = Reserva::findOrFail($request->reserva_id);
+        $reserva->rsva_estado = $request->nuevo_estado;
+        $reserva->save();
+
+        return back()->with('success', "La reserva #{$reserva->reserva_id} ha sido {$request->nuevo_estado}.");
     }
 }

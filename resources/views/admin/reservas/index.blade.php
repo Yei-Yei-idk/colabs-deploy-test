@@ -28,7 +28,7 @@
 </div>
 
 {{-- ── CALENDARIO DEL DÍA ──────────────────────────────────── --}}
-<h2>Calendario del día {{ $fecha->translatedFormat('d \d\e F \d\e Y') }}</h2>
+<h2>Calendario del día {{ $fecha->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}</h2>
 
 <div style="overflow-x:auto;">
 <table class="tabla-reservas">
