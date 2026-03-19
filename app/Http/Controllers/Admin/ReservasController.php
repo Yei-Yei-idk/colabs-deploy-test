@@ -62,15 +62,29 @@ class ReservasController extends Controller
      * Lista de reservas finalizadas.
      * Equivalente a Finalizadas.php
      */
-    public function finalizadas()
+    public function finalizadas(Request $request)
     {
         Carbon::setLocale('es');
+
+        // Manejo de fecha con Carbon (reemplaza $_GET['fecha'])
+        $fechaInput = $request->get('fecha', Carbon::today()->format('Y-m-d'));
+        $fecha      = Carbon::parse($fechaInput)->locale('es');
+
+        $fechaAnterior  = $fecha->copy()->subDay()->format('Y-m-d');
+        $fechaSiguiente = $fecha->copy()->addDay()->format('Y-m-d');
+
         $reservas = Reserva::with(['espacio', 'usuario'])
+            ->whereDate('rsva_fecha', $fecha->format('Y-m-d'))
             ->whereIn('rsva_estado', ['Finalizada', 'finalizada'])
             ->orderBy('rsva_fecha', 'desc')
             ->get();
 
-        return view('admin.reservas.finalizadas', compact('reservas'));
+        return view('admin.reservas.finalizadas', compact(
+            'reservas',
+            'fecha',
+            'fechaAnterior',
+            'fechaSiguiente'
+        ));
     }
 
     /**
