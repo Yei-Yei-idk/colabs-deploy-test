@@ -33,10 +33,22 @@
     <div class="nav-right">
       <!-- Botón de notificaciones -->
       <div class="notificaciones-dropdown">
-        <button class="notificaciones-btn" id="btnNotificaciones">🔔</button>
+        <button class="notificaciones-btn" id="btnNotificaciones" style="position: relative;">
+            🔔
+            <span id="notif-indicator" style="display:none; position:absolute; top:2px; right:2px; width:8px; height:8px; background-color:red; border-radius:50%; border:1px solid white;"></span>
+        </button>
         <div class="notificaciones-menu" id="notificacionesMenu">
           
-          @forelse($notificaciones ?? [] as $reserva)
+          @php
+              $notificaciones = auth()->check() ? \App\Models\Reserva::with('espacio')
+                  ->where('user_id', auth()->id())
+                  ->orderBy('reserva_id', 'desc')
+                  ->take(5)
+                  ->get() : [];
+              $notificacionesStr = implode('|', collect($notificaciones)->map(function($r) { return $r->reserva_id . '-' . $r->rsva_estado; })->toArray());
+          @endphp
+          @forelse($notificaciones as $reserva)
+              @php /** @var \App\Models\Reserva $reserva */ @endphp
               <div class="notificacion {{ $reserva->rsva_estado }}">
                   @if ($reserva->rsva_estado == 'Aceptada')
                       <strong>✅ ¡Reserva confirmada!</strong>
@@ -53,11 +65,11 @@
                   <p class="notification-time">{{ \Carbon\Carbon::parse($reserva->rsva_fecha)->format('d M') }} de {{ \Carbon\Carbon::parse($reserva->rsva_hora_inicio)->format('g:i A') }} a {{ \Carbon\Carbon::parse($reserva->rsva_hora_fin)->format('g:i A') }}</p>
 
                   @if ($reserva->rsva_estado == 'Aceptada' || $reserva->rsva_estado == 'Pendiente')
-                      <button class='btn-ver btn-dark' onclick="window.location.href='{{ route('cliente.detalles_reserva', $reserva->reserva_id) }}'">Ver detalles</button>
+                      <button class='btn-ver btn-dark' data-url="{{ route('cliente.detalles_reserva', $reserva->reserva_id) }}" onclick="window.location.href=this.getAttribute('data-url')">Ver detalles</button>
                   @elseif ($reserva->rsva_estado == 'Rechazada' || $reserva->rsva_estado == 'Cancelada')
-                      <button class='btn-alternativa' onclick="window.location.href='{{ route('cliente.buscar_espacios') }}'">Buscar alternativa</button>
+                      <button class='btn-alternativa' data-url="{{ route('cliente.buscar_espacios') }}" onclick="window.location.href=this.getAttribute('data-url')">Buscar alternativa</button>
                   @else
-                      <button class='btn-reseña' onclick="window.location.href='{{ route('cliente.detalles_reserva', $reserva->reserva_id) }}'">Ver reserva</button>
+                      <button class='btn-reseña' data-url="{{ route('cliente.detalles_reserva', $reserva->reserva_id) }}" onclick="window.location.href=this.getAttribute('data-url')">Ver reserva</button>
                   @endif
               </div>
           @empty
@@ -70,9 +82,9 @@
       <!-- Perfil -->
       <div class="perfil-dropdown">
         <button class="perfil-btn" onclick="document.getElementById('menuPerfil').classList.toggle('show')">
-          <img src="{{ asset('ASSETS/icon.webp') }}" alt="avatar" height="200px">
+          <div class="review-avatar {{ auth()->user()->avatar_color }}" style="margin-right: 15px; width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: white; font-weight: bold; font-size: 1.05rem; flex-shrink: 0;">{{ auth()->user()->avatar_initial }}</div>
           <!-- Obteniendo datos del usuario autenticado en Laravel -->
-          <span>{{ auth()->user()->user_nombre }}</span>
+          <span>{{ auth()->user()->first_name }}</span>
         </button>
         <ul class="dropdown-menu" name="menuPerfil" id="menuPerfil" hidden>
           <li><a href="{{ route('cliente.perfil') }}">Mi perfil</a></li>
@@ -165,13 +177,37 @@
             }, 3500);
         }
 
-        @if (session('status'))
-            snack("{{ session('status') }}");
-        @endif
+        let sessionStatus = "{{ session('status') ?? session('success') ?? session('error') }}";
+        if (sessionStatus) {
+            snack(sessionStatus);
+        }
   </script>
 
     <script src="{{ asset('js/cliente/global_cliente.js') }}"></script>
   
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnNotificaciones = document.getElementById('btnNotificaciones');
+            const indicator = document.getElementById('notif-indicator');
+            const currentState = "{{ $notificacionesStr ?? '' }}";
+            const lastSeenState = localStorage.getItem('colabs_notifications_state');
+
+            // Mostrar el indicador si el estado actual es diferente al guardado y hay notificaciones
+            if (currentState && currentState !== lastSeenState) {
+                if (indicator) indicator.style.display = 'block';
+            }
+
+            if (btnNotificaciones) {
+                btnNotificaciones.addEventListener('click', () => {
+                    // Al abrir el menú, ocultar indicador y guardar el estado actual como "visto"
+                    if (indicator) indicator.style.display = 'none';
+                    if (currentState) {
+                        localStorage.setItem('colabs_notifications_state', currentState);
+                    }
+                });
+            }
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>

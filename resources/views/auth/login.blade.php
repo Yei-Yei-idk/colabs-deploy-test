@@ -18,6 +18,7 @@
                 </div>
             @endif
 
+
             <form action="{{ route('login.autenticar') }}" method="post">
                 @csrf
 

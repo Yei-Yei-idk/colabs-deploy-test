@@ -16,7 +16,7 @@
                                 @if(!empty($imagenes))
                                     <img id="mainImage" src="{{ asset('uploads/' . $imagenes[0]) }}"
                                         alt="{{ $espacio->esp_nombre }}"
-                                        onerror="this.src='{{ asset('uploads/OF1 .jpeg') }}'">
+                                        data-fallback="{{ asset('uploads/OF1 .jpeg') }}" onerror="this.src=this.getAttribute('data-fallback')">
                                 @else
                                     <img src="{{ asset('uploads/OF1 .jpeg') }}" alt="Sin imagen">
                                 @endif
@@ -54,14 +54,15 @@
                             @endphp
                             @foreach($reviews_to_show as $index => $review)
                                 @php
-                                    $color = $colors[$index % 4];
+                                    $last_digit = (int) substr((string) ($review['user_id'] ?? $index), -1);
+                                    $color = $colors[$last_digit % 4];
                                     $inicial = strtoupper(substr($review['user_nombre'], 0, 1));
                                 @endphp
                                 <div class="review-card">
                                     <div class="review-avatar {{ $color }}">{{ $inicial }}</div>
                                     <div class="review-content">
                                         <div class="reviewer-info">
-                                            <span class="reviewer-name">{{ $review['user_nombre'] }}</span>
+                                            <span class="reviewer-name">{{ explode(' ', trim($review['user_nombre']))[0] }}</span>
                                             <span class="review-date">Recientemente</span>
                                         </div>
                                         <div class="review-stars">@for($i = 1; $i <= 5; $i++){{ $i <= $review['calif_puntuacion'] ? '★' : '☆' }}@endfor</div>
@@ -103,23 +104,6 @@
                                     <div class="time-input-container">
                                         <select id="hora_inicio" name="hora_inicio" class="time-select" required>
                                             <option value="">Seleccionar hora</option>
-                                            <option value="06:00">06:00 AM</option>
-                                            <option value="07:00">07:00 AM</option>
-                                            <option value="08:00">08:00 AM</option>
-                                            <option value="09:00">09:00 AM</option>
-                                            <option value="10:00">10:00 AM</option>
-                                            <option value="11:00">11:00 AM</option>
-                                            <option value="12:00">12:00 PM</option>
-                                            <option value="13:00">01:00 PM</option>
-                                            <option value="14:00">02:00 PM</option>
-                                            <option value="15:00">03:00 PM</option>
-                                            <option value="16:00">04:00 PM</option>
-                                            <option value="17:00">05:00 PM</option>
-                                            <option value="18:00">06:00 PM</option>
-                                            <option value="19:00">07:00 PM</option>
-                                            <option value="20:00">08:00 PM</option>
-                                            <option value="21:00">09:00 PM</option>
-                                            <option value="22:00">10:00 PM</option>
                                         </select>
                                         <span class="clock-icon">🕘</span>
                                     </div>
@@ -185,14 +169,15 @@
                     @php $colors = ['purple', 'green', 'orange', 'blue']; @endphp
                     @foreach($calificaciones as $index => $review)
                         @php
-                            $color = $colors[$index % 4];
+                            $last_digit = (int) substr((string) ($review['user_id'] ?? $index), -1);
+                            $color = $colors[$last_digit % 4];
                             $inicial = strtoupper(substr($review['user_nombre'], 0, 1));
                         @endphp
                         <div class="modal-review">
                             <div class="modal-review-avatar {{ $color }}">{{ $inicial }}</div>
                             <div class="modal-review-content">
                                 <div class="modal-reviewer-info">
-                                    <span class="modal-reviewer-name">{{ $review['user_nombre'] }}</span>
+                                    <span class="modal-reviewer-name">{{ explode(' ', trim($review['user_nombre']))[0] }}</span>
                                 </div>
                                 <div class="modal-review-stars">@for($i = 1; $i <= 5; $i++){{ $i <= $review['calif_puntuacion'] ? '★' : '☆' }}@endfor</div>
                                 <p class="modal-review-text">{{ $review['calif_txt'] }}</p>
@@ -255,16 +240,43 @@
     </div>
 
 
+    <!-- Modal de Alternativas -->
+    <div id="alternativasModal" class="modal-overlay modal-hidden">
+        <div class="modal-container alt-modal-container">
+            <div class="modal-header alt-modal-header">
+                <h3 class="alt-modal-title">
+                    <span class="alt-modal-title-icon"></span> Espacios Similares Libres
+                </h3>
+                <button class="alt-modal-close" onclick="closeAlternativasModal()">&times;</button>
+            </div>
+            <div class="modal-content alt-modal-body" id="alternativasModalBody">
+                <!-- Contenido dinámico desde JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="reservaConfigData" 
+         data-precio-hora="{{ $espacio->esp_precio_hora }}"
+         data-capacidad="{{ $espacio->esp_capacidad }}"
+         data-espacio-id="{{ $espacio->espacio_id }}"
+         data-espacio-nombre="{{ $espacio->esp_nombre }}"
+         data-csrf="{{ csrf_token() }}"
+         data-verificar-url="{{ route('cliente.verificar_disponibilidad') }}"
+         data-alternativas-url="{{ route('cliente.alternativas') }}"
+         data-confirmar-url="{{ route('cliente.confirmar_reserva') }}"
+         style="display:none;"></div>
     <script>
+        const configElement = document.getElementById('reservaConfigData');
         window.reservaConfig = {
-            precioHora: parseFloat({{ $espacio->esp_precio_hora }}),
-            capacidadMaxima: parseInt({{ $espacio->esp_capacidad }}),
-            espacioId: parseInt({{ $espacio->espacio_id }}),
-            espacioNombre: @json($espacio->esp_nombre),
-            csrfToken: '{{ csrf_token() }}',
-            verificarUrl: '{{ route("cliente.verificar_disponibilidad") }}',
-            confirmarUrl: '{{ route("cliente.confirmar_reserva") }}'
+            precioHora: parseFloat(configElement.getAttribute('data-precio-hora')),
+            capacidadMaxima: parseInt(configElement.getAttribute('data-capacidad')),
+            espacioId: parseInt(configElement.getAttribute('data-espacio-id')),
+            espacioNombre: configElement.getAttribute('data-espacio-nombre'),
+            csrfToken: configElement.getAttribute('data-csrf'),
+            verificarUrl: configElement.getAttribute('data-verificar-url'),
+            alternativasUrl: configElement.getAttribute('data-alternativas-url'),
+            confirmarUrl: configElement.getAttribute('data-confirmar-url')
         };
     </script>
-    <script src="{{ asset('js/cliente/reserva.js') }}"></script>
+    <script src="{{ asset('js/cliente/reserva.js?v=' . time()) }}"></script>
 @endsection

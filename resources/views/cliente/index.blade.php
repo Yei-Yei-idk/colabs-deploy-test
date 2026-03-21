@@ -38,7 +38,7 @@
                         $imgSrc = $espacio->imagen ? $espacio->imagen->foto : 'default.jpg';
                     @endphp
                     <div class="slide-card">
-                        <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $espacio->esp_nombre }}" onerror="this.src='{{ asset('uploads/OF1 .jpeg') }}'">
+                        <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $espacio->esp_nombre }}" data-fallback="{{ asset('uploads/OF1 .jpeg') }}" onerror="this.src=this.getAttribute('data-fallback')">
                         <h3>{{ $espacio->esp_nombre }}</h3>
                         <p>{{ $espacio->esp_descripcion ?? 'Espacio ideal para tus proyectos.' }}</p>
                     </div>

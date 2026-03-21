@@ -37,6 +37,7 @@ Route::prefix('cliente')->name('cliente.')->middleware(['auth', 'es.cliente'])->
     Route::post('/calificar', [ClienteController::class, 'calificarEspacio'])->name('calificar');
     Route::get('/reservar/{id}', [ClienteController::class, 'reservar'])->name('reservar');
     Route::post('/verificar-disponibilidad', [ClienteController::class, 'verificarDisponibilidad'])->name('verificar_disponibilidad');
+    Route::post('/alternativas', [ClienteController::class, 'alternativas'])->name('alternativas');
     Route::post('/confirmar-reserva', [ClienteController::class, 'confirmarReserva'])->name('confirmar_reserva');
 });
 

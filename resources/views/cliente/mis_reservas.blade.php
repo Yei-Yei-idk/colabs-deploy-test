@@ -36,7 +36,7 @@
 
             @if($imgSrc)
                 <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $reserva->esp_nombre }}"
-                     onerror="this.src='{{ asset('uploads/OF1 .jpeg') }}'">
+                     data-fallback="{{ asset('uploads/OF1 .jpeg') }}" onerror="this.src=this.getAttribute('data-fallback')">
             @else
                 <img src="{{ asset('uploads/OF1 .jpeg') }}" alt="Sin imagen">
             @endif
@@ -67,7 +67,7 @@
                     @endphp
                     
                     @if(!$ya_calificado)
-                        <button type="button" onclick="openReviewModal({{ $reserva->espacio_id }}, {{ $reserva->reserva_id }})" 
+                        <button type="button" data-espacio-id="{{ $reserva->espacio_id }}" data-reserva-id="{{ $reserva->reserva_id }}" onclick="openReviewModal(this.getAttribute('data-espacio-id'), this.getAttribute('data-reserva-id'))" 
                                 class="btn-reservar btn-calificar">
                             ⭐ Calificar
                         </button>

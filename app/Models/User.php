@@ -47,6 +47,23 @@ class User extends Authenticatable
         return 'user_contrasena';
     }
 
+    public function getAvatarColorAttribute()
+    {
+        $colors = ['purple', 'green', 'orange', 'blue'];
+        $lastDigit = (int) substr((string) $this->user_id, -1);
+        return $colors[$lastDigit % 4];
+    }
+
+    public function getAvatarInitialAttribute()
+    {
+        return strtoupper(substr($this->user_nombre, 0, 1));
+    }
+
+    public function getFirstNameAttribute()
+    {
+        return explode(' ', trim($this->user_nombre))[0];
+    }
+
     /**
      * Get the attributes that should be cast.
      *

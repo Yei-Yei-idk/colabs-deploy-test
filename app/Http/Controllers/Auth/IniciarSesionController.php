@@ -61,7 +61,7 @@ class IniciarSesionController extends Controller
         switch ($usuario->rol_id) {
             case 3:
                 // Cliente
-                return redirect()->route('cliente.index')->with('status', '👋 ¡Bienvenido de nuevo!');
+                return redirect()->route('cliente.index')->with('status', '👋 ¡Bienvenido/a ' . $usuario->user_nombre . '!');
 
             case 1:
             case 2:

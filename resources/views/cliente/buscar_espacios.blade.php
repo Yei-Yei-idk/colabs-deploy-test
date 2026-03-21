@@ -64,7 +64,7 @@
                 @endphp
                 <div class="espacio-card">
                     <!-- Mostrando la imagen real subida (o la de por defecto si no tiene) -->
-                    <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $espacio->esp_nombre }}" onerror="this.src='{{ asset('uploads/OF1 .jpeg') }}'">
+                    <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $espacio->esp_nombre }}" data-fallback="{{ asset('uploads/OF1 .jpeg') }}" onerror="this.src=this.getAttribute('data-fallback')">
                     
                     <div class="espacio-info">
                         <h3>{{ $espacio->esp_nombre }}</h3>

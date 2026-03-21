@@ -2762,3 +2762,192 @@ nav img {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ─────────────── MODAL DE ALTERNATIVAS ─────────────── */
+.alt-modal-container {
+  max-width: 850px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.alt-modal-header {
+  border-bottom: 1px solid #eee;
+  padding: 20px 30px;
+  background: #fff;
+  border-radius: 15px 15px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alt-modal-title {
+  margin: 0;
+  color: #273b4e;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alt-modal-title-icon {
+  font-size: 24px;
+}
+
+.alt-modal-close {
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.alt-modal-body {
+  background-color: #fbfcff;
+  padding: 30px;
+}
+
+/* ─────────────── TARJETAS DE ALTERNATIVAS ─────────────── */
+.alt-alert-box {
+  background-color: #f0f4f8;
+  border-left: 5px solid #273b4e;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.alt-alert-title {
+  color: #273b4e;
+  font-size: 15px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.alt-alert-text {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.btn-ver-opciones {
+  background-color: #273b4e;
+  color: white;
+  white-space: nowrap;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 3px 6px rgba(39, 59, 78, 0.2);
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.btn-ver-opciones:hover {
+  background-color: #1a2733;
+}
+
+.alt-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 25px;
+}
+
+.alt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card-alt-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ebebeb;
+}
+
+.card-alt-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.card-alt-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-alt-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-alt-title {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #273b4e;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.card-alt-details {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.card-alt-price {
+  font-size: 18px;
+  color: #2ecc71;
+  font-weight: 800;
+}
+
+.card-alt-price-unit {
+  color: #999;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.card-alt-capacity {
+  font-size: 13px;
+  color: #777;
+  font-weight: 500;
+}
+
+.btn-reservar-alt {
+  margin-top: auto;
+  display: block;
+  text-align: center;
+  background-color: #273b4e;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 12px 15px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-reservar-alt:hover {
+  background-color: #1a2733;
+  color: white;
+}
+
+/* ─────────────── COLORES DE AVATARES ─────────────── */
+.purple { background-color: #9b59b6 !important; color: #ffffff !important; }
+.green { background-color: #2ecc71 !important; color: #ffffff !important; }
+.orange { background-color: #e67e22 !important; color: #ffffff !important; }
+.blue { background-color: #3498db !important; color: #ffffff !important; }

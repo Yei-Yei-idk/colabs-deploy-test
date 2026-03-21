@@ -24,7 +24,7 @@
         <div class="main-image">
             @if($imgSrc)
                 <img src="{{ asset('uploads/' . $imgSrc) }}" alt="{{ $reserva->esp_nombre }}"
-                     onerror="this.src='{{ asset('uploads/OF1 .jpeg') }}'">
+                     data-fallback="{{ asset('uploads/OF1 .jpeg') }}" onerror="this.src=this.getAttribute('data-fallback')">
             @else
                 <img src="{{ asset('uploads/OF1 .jpeg') }}" alt="Espacio reservado">
             @endif
@@ -88,7 +88,7 @@
                     </div>
                     
                     @if(!$tiene_calificacion)
-                        <button type="button" onclick="openReviewModal({{ $reserva->espacio_id }}, {{ $reserva->reserva_id }})" 
+                        <button type="button" data-espacio-id="{{ $reserva->espacio_id }}" data-reserva-id="{{ $reserva->reserva_id }}" onclick="openReviewModal(this.getAttribute('data-espacio-id'), this.getAttribute('data-reserva-id'))"
                            class="btn-resena btn-calificar mt-15 w-full-btn" style="padding: 12px; border-radius:8px; font-weight:bold; cursor:pointer;">
                             ⭐ Califica tu experiencia
                         </button>

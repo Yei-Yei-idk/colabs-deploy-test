@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Espacio;
+use App\Models\Reserva;
+use App\Models\Calificacion;
+use App\Models\Imagen;
 
 class ClienteController extends Controller
 {
     public function index()
     {
         // Eloquent: Obtener 5 espacios activos ordenados por nombre
-        $espacios = \App\Models\Espacio::where('esp_estado', 'Activo')
+        $espacios = Espacio::where('esp_estado', 'Activo')
                         ->orderBy('esp_nombre')
                         ->limit(5)
                         ->get();
@@ -24,7 +30,7 @@ class ClienteController extends Controller
         $precioMax = $request->input('esp_precio_hora');
 
         // Eloquent base query con eager loading de la imagen
-        $query = \App\Models\Espacio::with('imagen')->where('esp_estado', 'Activo');
+        $query = Espacio::with('imagen')->where('esp_estado', 'Activo');
 
         if (!empty($tipo)) {
             $query->where('esp_tipo', $tipo);
@@ -47,9 +53,9 @@ class ClienteController extends Controller
 
     public function misReservas()
     {
-        $user_id = auth()->id(); // Usar el ID del usuario autenticado
+        $user_id = Auth::id(); // Usar el ID del usuario autenticado
 
-        $reservas = \App\Models\Reserva::where('user_id', $user_id)
+        $reservas = Reserva::where('user_id', $user_id)
             ->join('espacios', 'reserva.espacio_id', '=', 'espacios.espacio_id')
             ->select(
                 'reserva.reserva_id',
@@ -70,13 +76,13 @@ class ClienteController extends Controller
 
     public function perfil()
     {
-        $usuario = auth()->user();
+        $usuario = Auth::user();
         return view('cliente.perfil', compact('usuario'));
     }
 
-    public function actualizarPerfil(\Illuminate\Http\Request $request)
+    public function actualizarPerfil(Request $request)
     {
-        $user_id = auth()->id();
+        $user_id = Auth::id();
 
         $request->validate([
             'nombre' => 'required|string|max:100',
@@ -102,16 +108,16 @@ class ClienteController extends Controller
             $updateData['user_contrasena'] = bcrypt($request->newpassword);
         }
 
-        \DB::table('usuarios')->where('user_id', $user_id)->update($updateData);
+        DB::table('usuarios')->where('user_id', $user_id)->update($updateData);
 
         return redirect()->route('cliente.perfil')->with('success', '✅ Perfil actualizado correctamente');
     }
 
     public function detallesReserva($id)
     {
-        $user_id = auth()->id();
+        $user_id = Auth::id();
 
-        $reserva = \App\Models\Reserva::where('reserva_id', $id)
+        $reserva = Reserva::where('reserva_id', $id)
             ->where('user_id', $user_id)
             ->join('espacios', 'reserva.espacio_id', '=', 'espacios.espacio_id')
             ->select(
@@ -128,23 +134,23 @@ class ClienteController extends Controller
                 'espacios.esp_tipo'
             )->firstOrFail();
 
-        $tiene_calificacion = \App\Models\Calificacion::where('espacio_id', $reserva->espacio_id)
+        $tiene_calificacion = Calificacion::where('espacio_id', $reserva->espacio_id)
             ->where('user_id', $user_id)
             ->exists();
 
         // Obtener solo una imagen para la vista
-        $imagen = \App\Models\Imagen::where('espacio_id', $reserva->espacio_id)->first();
+        $imagen = Imagen::where('espacio_id', $reserva->espacio_id)->first();
         $imgSrc = $imagen ? $imagen->foto : null;
 
         return view('cliente.detalles_reserva', compact('reserva', 'tiene_calificacion', 'imgSrc'));
     }
 
-    public function cancelarReserva(\Illuminate\Http\Request $request)
+    public function cancelarReserva(Request $request)
     {
-        $user_id = auth()->id();
+        $user_id = Auth::id();
         $reserva_id = $request->reserva_id;
 
-        $reserva = \App\Models\Reserva::where('reserva_id', $reserva_id)
+        $reserva = Reserva::where('reserva_id', $reserva_id)
             ->where('user_id', $user_id)
             ->firstOrFail();
 
@@ -158,9 +164,9 @@ class ClienteController extends Controller
         }
     }
 
-    public function calificarEspacio(\Illuminate\Http\Request $request)
+    public function calificarEspacio(Request $request)
     {
-        $user_id = auth()->id();
+        $user_id = Auth::id();
 
         $request->validate([
             'espacio_id' => 'required|integer',
@@ -170,12 +176,12 @@ class ClienteController extends Controller
         ]);
 
         // Evitar duplicados
-        $existe = \App\Models\Calificacion::where('reserva_id', $request->reserva_id)->exists();
+        $existe = Calificacion::where('reserva_id', $request->reserva_id)->exists();
         if ($existe) {
             return back()->with('error', '⚠️ Ya has calificado esta reserva anteriormente.');
         }
 
-        \App\Models\Calificacion::create([
+        Calificacion::create([
             'calif_txt' => $request->calif_txt,
             'calif_puntuacion' => $request->calif_puntuacion,
             'user_id' => $user_id,
@@ -191,15 +197,15 @@ class ClienteController extends Controller
      */
     public function reservar($id)
     {
-        $espacio = \App\Models\Espacio::findOrFail($id);
+        $espacio = Espacio::findOrFail($id);
 
         // Obtener primera imagen del espacio
-        $imagenes = \App\Models\Imagen::where('espacio_id', $id)->limit(1)->pluck('foto')->toArray();
+        $imagenes = Imagen::where('espacio_id', $id)->limit(1)->pluck('foto')->toArray();
 
         // Obtener calificaciones con nombre del usuario
-        $calificaciones = \App\Models\Calificacion::where('espacio_id', $id)
+        $calificaciones = Calificacion::where('espacio_id', $id)
             ->join('usuarios', 'calificaciones.user_id', '=', 'usuarios.user_id')
-            ->select('calificaciones.calif_txt', 'calificaciones.calif_id', 'calificaciones.calif_puntuacion', 'usuarios.user_nombre')
+            ->select('calificaciones.calif_txt', 'calificaciones.calif_id', 'calificaciones.calif_puntuacion', 'usuarios.user_nombre', 'usuarios.user_id')
             ->orderBy('calificaciones.calif_id', 'DESC')
             ->get()
             ->toArray();
@@ -229,8 +235,17 @@ class ClienteController extends Controller
             ]);
         }
 
+        // Validar que no sea en el pasado
+        $fechaHoraInicio = \Carbon\Carbon::parse($fecha . ' ' . $hora_inicio);
+        if ($fechaHoraInicio->isPast()) {
+            return response()->json([
+                'disponible' => false,
+                'mensaje' => 'No puedes reservar en una fecha u hora que ya pasó.'
+            ]);
+        }
+
         // Verificar que el espacio exista y esté activo
-        $espacio = \App\Models\Espacio::find($espacio_id);
+        $espacio = Espacio::find($espacio_id);
         if (!$espacio || $espacio->esp_estado !== 'Activo') {
             return response()->json([
                 'disponible' => false,
@@ -239,9 +254,9 @@ class ClienteController extends Controller
         }
 
         // Verificar conflictos con Eloquent
-        $conflictos = \App\Models\Reserva::where('espacio_id', $espacio_id)
+        $conflicto = Reserva::where('espacio_id', $espacio_id)
             ->where('rsva_fecha', $fecha)
-            ->whereIn('rsva_estado', ['Pendiente', 'Confirmada'])
+            ->whereIn('rsva_estado', ['Aceptada', 'Pendiente'])
             ->where(function ($q) use ($hora_inicio, $hora_fin) {
                 $q->where(function ($sub) use ($hora_inicio, $hora_fin) {
                     // Reserva existente cubre parte del rango solicitado
@@ -253,13 +268,24 @@ class ClienteController extends Controller
                         ->where('rsva_hora_fin', '<=', $hora_fin);
                 });
             })
-            ->count();
+            ->first();
 
-        if ($conflictos > 0) {
-            return response()->json([
-                'disponible' => false,
-                'mensaje' => 'El horario seleccionado ya está reservado. Por favor, elige otro horario.'
-            ]);
+        if ($conflicto) {
+            $esPropia = $conflicto->user_id === Auth::id();
+
+            if ($conflicto->rsva_estado === 'Aceptada') {
+                return response()->json([
+                    'disponible' => false,
+                    'estado' => $esPropia ? 'TuyaAceptada' : 'Aceptada',
+                    'mensaje' => $esPropia ? 'Ya tienes esta reserva aceptada.' : 'El horario seleccionado ya está reservado.'
+                ]);
+            } elseif ($conflicto->rsva_estado === 'Pendiente') {
+                return response()->json([
+                    'disponible' => !$esPropia, // Permitimos competir a menos que ya sea tuya
+                    'estado' => $esPropia ? 'TuyaPendiente' : 'Pendiente',
+                    'mensaje' => $esPropia ? 'Ya tienes una solicitud en espera aquí.' : 'Hay solicitudes en espera, pero puedes reservar.'
+                ]);
+            }
         }
 
         // Generar bloques de tiempo por hora
@@ -283,8 +309,69 @@ class ClienteController extends Controller
 
         return response()->json([
             'disponible' => true,
+            'estado' => 'Libre',
             'mensaje' => 'Espacio disponible',
             'bloques' => $bloques,
+        ]);
+    }
+
+    /**
+     * Busca espacios alternativos disponibles cuando el horario solicitado está ocupado
+     */
+    public function alternativas(Request $request)
+    {
+        $espacio_id = $request->input('espacio_id');
+        $fecha = $request->input('fecha');
+        $hora_inicio = $request->input('hora_inicio');
+        $hora_fin = $request->input('hora_fin');
+
+        $espacioOriginal = Espacio::findOrFail($espacio_id);
+
+        // Rango de precio +/- 30%
+        $margen_precio = $espacioOriginal->esp_precio_hora * 0.3;
+        $precio_min = $espacioOriginal->esp_precio_hora - $margen_precio;
+        $precio_max = $espacioOriginal->esp_precio_hora + $margen_precio;
+
+        $espaciosPotenciales = Espacio::with('imagen')
+            ->where('esp_estado', 'Activo')
+            ->where('esp_tipo', $espacioOriginal->esp_tipo)
+            ->where('espacio_id', '!=', $espacio_id)
+            ->whereBetween('esp_precio_hora', [$precio_min, $precio_max])
+            ->get();
+
+        $alternativas = [];
+
+        foreach ($espaciosPotenciales as $espacio) {
+            // Verificar solapamiento en Aceptada
+            $conflicto = Reserva::where('espacio_id', $espacio->espacio_id)
+                ->where('rsva_fecha', $fecha)
+                ->where('rsva_estado', 'Aceptada')
+                ->where(function ($q) use ($hora_inicio, $hora_fin) {
+                    $q->where(function ($sub) use ($hora_inicio, $hora_fin) {
+                        $sub->where('rsva_hora_inicio', '<', $hora_fin)
+                            ->where('rsva_hora_fin', '>', $hora_inicio);
+                    })->orWhere(function ($sub) use ($hora_inicio, $hora_fin) {
+                        $sub->where('rsva_hora_inicio', '>=', $hora_inicio)
+                            ->where('rsva_hora_fin', '<=', $hora_fin);
+                    });
+                })->exists();
+
+            if (!$conflicto) {
+                $alternativas[] = [
+                    'id' => $espacio->espacio_id,
+                    'nombre' => $espacio->esp_nombre,
+                    'precio' => $espacio->esp_precio_hora,
+                    'capacidad' => $espacio->esp_capacidad,
+                    'imagen' => $espacio->imagen ? asset('uploads/' . $espacio->imagen->foto) : asset('uploads/OF1 .jpeg')
+                ];
+
+                if (count($alternativas) >= 3) break; // Traer máximo 3 sugerencias top
+            }
+        }
+
+        return response()->json([
+            'success' => count($alternativas) > 0,
+            'alternativas' => $alternativas
         ]);
     }
 
@@ -293,15 +380,44 @@ class ClienteController extends Controller
      */
     public function confirmarReserva(Request $request)
     {
+        // Validar que no sea en el pasado
+        $fechaHoraInicio = \Carbon\Carbon::parse($request->fecha . ' ' . $request->hora_inicio);
+        if ($fechaHoraInicio->isPast()) {
+            return back()->with('error', '⚠️ No puedes realizar reservas en el pasado.');
+        }
+
         // Validar capacidad en el servidor por seguridad
-        $espacio = \App\Models\Espacio::findOrFail($request->espacio_id);
+        $espacio = Espacio::findOrFail($request->espacio_id);
         if ($request->num_invitados > $espacio->esp_capacidad) {
             return back()->with('error', '⚠️ El número de invitados excede la capacidad máxima del espacio.');
         }
 
+        // Double check de conflictos antes de crear (Carrera Crítica)
+        $conflicto = Reserva::where('espacio_id', $request->espacio_id)
+            ->where('rsva_fecha', $request->fecha)
+            ->whereIn('rsva_estado', ['Aceptada', 'Pendiente'])
+            ->where(function ($q) use ($request) {
+                $q->where(function ($sub) use ($request) {
+                    $sub->where('rsva_hora_inicio', '<', $request->hora_fin)
+                        ->where('rsva_hora_fin', '>', $request->hora_inicio);
+                })->orWhere(function ($sub) use ($request) {
+                    $sub->where('rsva_hora_inicio', '>=', $request->hora_inicio)
+                        ->where('rsva_hora_fin', '<=', $request->hora_fin);
+                });
+            })
+            ->first();
+
+        if ($conflicto) {
+            if ($conflicto->rsva_estado === 'Aceptada') {
+                return back()->with('error', '⚠️ Lo sentimos, alguien más acaba de reservar este espacio en ese horario.');
+            } elseif ($conflicto->user_id === Auth::id() && $conflicto->rsva_estado === 'Pendiente') {
+                return back()->with('error', '⚠️ Ya tienes una solicitud en espera para este horario.');
+            }
+        }
+
         // Crear la reserva con Eloquent
-        \App\Models\Reserva::create([
-            'user_id' => auth()->id(),
+        Reserva::create([
+            'user_id' => Auth::id(),
             'espacio_id' => $request->espacio_id,
             'rsva_fecha' => $request->fecha,
             'rsva_hora_inicio' => $request->hora_inicio,

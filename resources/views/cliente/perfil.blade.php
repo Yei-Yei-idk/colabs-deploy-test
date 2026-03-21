@@ -24,8 +24,10 @@
 
     <div class="perfil-container">
         <div class="perfil-left">
-            <img src="{{ asset('ASSETS/icon.webp') }}" alt="Foto de Perfil Usuario" class="Foto_usuario">
-            <h3>{{ $usuario->user_nombre ?? $usuario->name ?? 'Usuario' }}</h3>
+            <div class="{{ $usuario->avatar_color ?? auth()->user()->avatar_color ?? 'blue' }}" style="width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 4rem; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+                {{ $usuario->avatar_initial ?? auth()->user()->avatar_initial ?? 'U' }}
+            </div>
+            <h3>{{ $usuario->first_name ?? $usuario->name ?? 'Usuario' }}</h3>
             <p class="correo">{{ $usuario->user_correo ?? $usuario->email ?? '' }}</p>
             <p class="verificado">✓ Cuenta Verificada</p>
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class EsAdministrador
 {
@@ -14,7 +15,7 @@ class EsAdministrador
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !in_array(auth()->user()->rol_id, [1, 2])) {
+        if (!Auth::check() || !in_array(Auth::user()->rol_id, [1, 2])) {
             return redirect()->route('login');
         }
 

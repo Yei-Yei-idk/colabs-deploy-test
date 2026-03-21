@@ -18,7 +18,7 @@ class ReservasController extends Controller
     {
         Carbon::setLocale('es');
         // Manejo de fecha con Carbon (reemplaza strtotime + date())
-        $fechaInput = $request->get('fecha', Carbon::today()->format('Y-m-d'));
+        $fechaInput = $request->input('fecha', Carbon::today()->format('Y-m-d'));
         $fecha      = Carbon::parse($fechaInput)->locale('es');
 
         $fechaAnterior  = $fecha->copy()->subDay()->format('Y-m-d');
@@ -67,7 +67,7 @@ class ReservasController extends Controller
         Carbon::setLocale('es');
 
         // Manejo de fecha con Carbon (reemplaza $_GET['fecha'])
-        $fechaInput = $request->get('fecha', Carbon::today()->format('Y-m-d'));
+        $fechaInput = $request->input('fecha', Carbon::today()->format('Y-m-d'));
         $fecha      = Carbon::parse($fechaInput)->locale('es');
 
         $fechaAnterior  = $fecha->copy()->subDay()->format('Y-m-d');

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const { precioHora, capacidadMaxima, espacioId, espacioNombre, csrfToken, verificarUrl, confirmarUrl } = config;
+    const { precioHora, capacidadMaxima, espacioId, espacioNombre, csrfToken, verificarUrl, alternativasUrl, confirmarUrl } = config;
     let currentGuests = 1;
 
     // Selectores del DOM
@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         {value:"16:00",label:"04:00 PM"},{value:"17:00",label:"05:00 PM"},
         {value:"18:00",label:"06:00 PM"},{value:"19:00",label:"07:00 PM"},
         {value:"20:00",label:"08:00 PM"},{value:"21:00",label:"09:00 PM"},
-        {value:"22:00",label:"10:00 PM"}
     ];
 
     /**
@@ -60,7 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const valorAnterior = selectInicio.value;
         selectInicio.innerHTML = '<option value="">Seleccionar hora</option>';
 
-        horasDisponibles.forEach(hora => {
+        // Excluir 21:00 como hora de inicio, ya que la hora máxima de fin es 21:00
+        const horasParaInicio = horasDisponibles.filter(h => h.value !== "21:00");
+        horasParaInicio.forEach(hora => {
             const option = document.createElement('option');
             option.value = hora.value;
             option.textContent = hora.label;
@@ -118,7 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
             const data = await response.json();
-            return data.disponible;
+            return {
+                disponible: data.disponible,
+                estado: data.estado || 'Libre'
+            };
         } catch (error) {
             console.error('Error al verificar disponibilidad:', error);
             return false;
@@ -172,10 +176,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const resultados = await Promise.all(
-            bloques.map(async (bloque) => ({
-                ...bloque,
-                disponible: await verificarBloqueHorario(fecha, bloque.inicio, bloque.fin)
-            }))
+            bloques.map(async (bloque) => {
+                const res = await verificarBloqueHorario(fecha, bloque.inicio, bloque.fin);
+                return {
+                    ...bloque,
+                    disponible: res.disponible,
+                    estado: res.estado
+                };
+            })
         );
 
         mostrarResultados(resultados);
@@ -183,11 +191,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mostrarResultados(resultados) {
         const todoOK = resultados.every(r => r.disponible);
+        const conEspera = resultados.some(r => r.estado === 'Pendiente');
         const algunoOK = resultados.some(r => r.disponible);
         let html = '<div id="availabilityContent">';
 
-        if (todoOK) {
+        if (todoOK && !conEspera) {
             html += '<div class="status-box status-success">✅ <strong>¡Excelente!</strong> Todo el horario está disponible</div>';
+        } else if (todoOK && conEspera) {
+            html += '<div class="status-box status-warning" style="background:#fff3cd; color:#856404; border: 1px solid #ffeeba;">⚠️ <strong>Atención:</strong> Hay solicitudes anteriores en espera para algunos bloques. Tu reserva no es prioridad y podría ser rechazada.</div>';
         } else if (algunoOK) {
             html += '<div class="status-box status-info">⚠️ <strong>Atención:</strong> Algunos bloques no están disponibles</div>';
         } else {
@@ -198,23 +209,137 @@ document.addEventListener('DOMContentLoaded', () => {
         html += '<div class="block-container">';
 
         resultados.forEach(r => {
-            const statusClass = r.disponible ? 'aceptada' : 'rechazada';
-            const statusText = r.disponible ? 'Disponible' : 'Ocupado';
-            const icon = r.disponible ? '✅' : '❌';
+            let statusClass = r.disponible ? 'aceptada' : 'rechazada';
+            let statusText = r.disponible ? 'Disponible' : 'Ocupado';
+            let icon = r.disponible ? '✅' : '❌';
+            let bgColor = r.disponible ? '#d4edda' : '#f8d7da';
 
-            html += `<div class="block-item border-${statusClass}" style="background: ${r.disponible ? '#d4edda' : '#f8d7da'};">
+            if (r.estado === 'TuyaAceptada' || r.estado === 'TuyaPendiente') {
+                statusClass = 'propia';
+                statusText = (r.estado === 'TuyaPendiente') ? 'Tu Solicitud' : 'Tu Reserva';
+                icon = '👤';
+                bgColor = '#d1ecf1'; // Azul celeste para propiedad
+            } else if (r.estado === 'Pendiente') {
+                statusClass = 'pendiente';
+                statusText = 'En Espera';
+                icon = '⏳';
+                bgColor = '#fff3cd'; // Amarillo
+            }
+
+            html += `<div class="block-item border-${statusClass}" style="background: ${bgColor};">
                         <span class="block-time">${formatearHora(r.inicio)} - ${formatearHora(r.fin)}</span>
                         <span class="block-status badge-${statusClass}">${icon} ${statusText}</span>
                      </div>`;
         });
 
         html += '</div></div>';
+
+        if (!todoOK) {
+            html += '<div id="alternativesContainer" class="mt-20"></div>';
+        }
+
         availabilityBox.innerHTML = html;
 
         setReserveBtn(todoOK);
         showBookingSections(todoOK);
         if (todoOK) calcularPrecio();
+
+        if (!todoOK) {
+            cargarAlternativas(fechaInput.value, selectInicio.value, selectFin.value);
+        }
     }
+
+    async function cargarAlternativas(fecha, hInicio, hFin) {
+        const altContainer = document.getElementById('alternativesContainer');
+        const modalBody = document.getElementById('alternativasModalBody');
+        if (!altContainer || !modalBody) return;
+
+        altContainer.innerHTML = '';
+        modalBody.innerHTML = '<div class="text-center" style="padding: 40px;"><div class="spinner-border text-primary" role="status"></div><p class="mt-3 text-muted">Buscando alternativas disponibles...</p></div>';
+
+        try {
+            const response = await fetch(alternativasUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    espacio_id: espacioId,
+                    fecha: fecha,
+                    hora_inicio: hInicio,
+                    hora_fin: hFin
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.alternativas.length > 0) {
+                // Alerta con botón para abrir el pop-up
+                altContainer.innerHTML = `
+                    <div class="alt-alert-box">
+                        <div>
+                            <strong class="alt-alert-title">🎯 ¡No pierdas tu día!</strong>
+                            <p class="alt-alert-text">Tenemos <strong>${data.alternativas.length} alternativas perfectas</strong> libres a esa hora.</p>
+                        </div>
+                        <button type="button" class="btn-ver-opciones" onclick="openAlternativasModal()">
+                            Ver Opciones
+                        </button>
+                    </div>
+                `;
+
+                // Construir tarjetas dentro del Pop-up usando las clases del cliente.css
+                let html = '<p class="alt-subtitle">Estos locales del mismo tipo no tienen reservas cruzadas en el horario que solicitaste.</p>';
+                html += '<div class="alt-grid">';
+                
+                data.alternativas.forEach(alt => {
+                    html += `
+                        <div class="card-alt-item">
+                            <img src="${alt.imagen}" alt="${alt.nombre}" class="card-alt-img">
+                            <div class="card-alt-content">
+                                <h5 class="card-alt-title" title="${alt.nombre}">${alt.nombre.length > 30 ? alt.nombre.substring(0,30)+'...' : alt.nombre}</h5>
+                                
+                                <div class="card-alt-details">
+                                    <span class="card-alt-price">
+                                        $${alt.precio.toLocaleString('es-CO')} <span class="card-alt-price-unit">/ hora</span>
+                                    </span>
+                                    <span class="card-alt-capacity">
+                                        👥 Capacidad: ${alt.capacidad} personas
+                                    </span>
+                                </div>
+
+                                <a href="/cliente/reservar/${alt.id}?fecha=${fecha}&h_inicio=${hInicio}&h_fin=${hFin}" class="btn-reservar-alt">
+                                    Reservar Este Local ➔
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                modalBody.innerHTML = html;
+            } else {
+                altContainer.innerHTML = '';
+                modalBody.innerHTML = '<div class="text-center p-5"><h5 class="text-muted mb-3">Lo sentimos</h5><p class="text-muted">No se encontraron alternativas similares libres para este horario.</p></div>';
+            }
+        } catch (error) {
+            console.error('Error al cargar alternativas:', error);
+            altContainer.innerHTML = '';
+            modalBody.innerHTML = '<div class="text-center text-danger p-4"><p>Ocurrió un error de red al buscar alternativas.</p></div>';
+        }
+    }
+
+    // Modal Trigger Functions for Alternativas
+    window.openAlternativasModal = function() {
+        const modal = document.getElementById('alternativasModal');
+        if (modal) modal.classList.remove('modal-hidden');
+    };
+
+    window.closeAlternativasModal = function() {
+        const modal = document.getElementById('alternativasModal');
+        if (modal) modal.classList.add('modal-hidden');
+    };
 
     function setReserveBtn(disponible) {
         reserveBtn.disabled = !disponible;
