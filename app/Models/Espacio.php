@@ -9,7 +9,7 @@ class Espacio extends Model
     protected $table = 'espacios';
     protected $primaryKey = 'espacio_id';
     public $incrementing = false;
-    public $timestamps = false; // Asumiendo que tu tabla original no usa created_at/updated_at
+    public $timestamps = false;
 
     protected $fillable = [
         'espacio_id',

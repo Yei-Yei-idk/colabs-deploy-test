@@ -14,7 +14,7 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        // Eloquent: Obtener 5 espacios activos ordenados por nombre
+        // Eloquent: Obtener 5 espacios activos ordenados por nombre (espacios destacados)
         $espacios = Espacio::where('esp_estado', 'Activo')
                         ->orderBy('esp_nombre')
                         ->limit(5)
@@ -37,8 +37,6 @@ class ClienteController extends Controller
         }
 
         if (!empty($capacidad)) {
-            // Generalmente, cuando alguien busca capacidad para "10 personas",
-            // necesita espacios que tengan capacidad de 10 o MÁS personas.
             $query->where('esp_capacidad', '>=', (int)$capacidad);
         }
 

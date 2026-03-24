@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Imagen extends Model
 {
     protected $table = 'imagenes';
-    public $timestamps = false; // Sin created_at
+    public $timestamps = false;
 
     protected $fillable = [
         'espacio_id',

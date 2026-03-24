@@ -46,7 +46,7 @@ class User extends Authenticatable
     {
         return 'user_contrasena';
     }
-
+    
     public function getAvatarColorAttribute()
     {
         $colors = ['purple', 'green', 'orange', 'blue'];
