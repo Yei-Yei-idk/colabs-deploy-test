@@ -14,16 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const userName = cell.dataset.userName || 'N/A';
             const userEmail = cell.dataset.userEmail || 'N/A';
             const espacioNombre = cell.dataset.espacioNombre || 'N/A';
-            const horaInicio = cell.dataset.horaInicio || 'N/A';
-            const horaFin = cell.dataset.horaFin || 'N/A';
             const reservaId = cell.dataset.reservaId || 'N/A';
+            const userPhone = cell.dataset.userPhone || 'N/A';
 
             tooltip.innerHTML = `
                 <p><strong>Reserva ID:</strong> ${reservaId}</p>
                 <p><strong>Espacio:</strong> ${espacioNombre}</p>
                 <p><strong>Usuario:</strong> ${userName}</p>
                 <p><strong>Email:</strong> ${userEmail}</p>
-                
+                <p><strong>Teléfono:</strong> ${userPhone}</p>
             `;
 
             const rect = cell.getBoundingClientRect();

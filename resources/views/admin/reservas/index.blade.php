@@ -88,6 +88,7 @@
                             data-user-name="{{ $reservaEncontrada->usuario->user_nombre ?? 'N/A' }}"
                             data-user-email="{{ $reservaEncontrada->usuario->user_correo ?? 'N/A' }}"
                             data-espacio-nombre="{{ $espacio->esp_nombre }}"
+                            data-user-phone="{{ $reservaEncontrada->usuario->user_telefono ?? 'Sin número' }}"
                             data-hora-inicio="{{ \Carbon\Carbon::parse($reservaEncontrada->rsva_hora_inicio)->format('g:i A') }}"
                             data-hora-fin="{{ \Carbon\Carbon::parse($reservaEncontrada->rsva_hora_fin)->format('g:i A') }}"
                         @endif>
