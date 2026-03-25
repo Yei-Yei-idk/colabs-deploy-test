@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>Espacio:</strong> ${espacioNombre}</p>
                 <p><strong>Usuario:</strong> ${userName}</p>
                 <p><strong>Email:</strong> ${userEmail}</p>
-                <p><strong>Horario:</strong> ${horaInicio} - ${horaFin}</p>
+                
             `;
 
             const rect = cell.getBoundingClientRect();
