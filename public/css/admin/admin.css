@@ -1154,6 +1154,10 @@ td {
   cursor: pointer;
   font-size: 14px;
   transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-nav:hover {
