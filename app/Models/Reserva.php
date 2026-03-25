@@ -27,8 +27,7 @@ class Reserva extends Model
         return $this->belongsTo(Espacio::class, 'espacio_id', 'espacio_id');
     }
 
-    public function usuario()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
-    }
+    public function usuario() {
+    return $this->belongsTo(User::class, 'user_id'); }
+
 }

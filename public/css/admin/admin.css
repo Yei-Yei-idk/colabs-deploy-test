@@ -226,6 +226,48 @@ td {
 .status.inactive {
   background: #ef4444;
 }
+
+/* Estilos para los bloques del calendario de reservas */
+.tabla-reservas td.disponible {
+  background-color: #22c55e;
+  color: #fff;
+  text-align: center;
+}
+
+.tabla-reservas td.reservado {
+  background-color: #ef4444;
+  color: #fff;
+  text-align: center;
+}
+
+/* Estilos para el tooltip de información de reserva */
+.reserva-tooltip {
+  visibility: hidden; /* Oculto por defecto */
+  opacity: 0; /* Transparente por defecto */
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  pointer-events: none; /* Permite que el ratón pase a través del tooltip */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  transform: translateX(-50%); /* Centra el tooltip respecto al punto de origen */
+  text-align: left;
+}
+
+.reserva-tooltip p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.reserva-tooltip strong {
+  color: #facc15; /* Color amarillo para resaltar */
+}
+
 .section {
   display: none;
 }
