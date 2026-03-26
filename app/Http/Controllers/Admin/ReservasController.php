@@ -105,4 +105,12 @@ class ReservasController extends Controller
 
         return back()->with('success', "La reserva #{$reserva->reserva_id} ha sido {$request->nuevo_estado}.");
     }
+    public function reservasDelDia()
+    {
+        $reservas = Reserva::with(['espacio', 'usuario'])
+            ->whereDate('rsva_fecha', Carbon::today())
+            ->get();
+
+        return response()->json($reservas);
+    }
 }

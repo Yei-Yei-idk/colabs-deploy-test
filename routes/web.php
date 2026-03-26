@@ -69,6 +69,7 @@ Route::prefix('admin')
         Route::get('/reservas/pendientes',  [ReservasController::class, 'pendientes'])->name('reservas.pendientes');
         Route::get('/reservas/finalizadas', [ReservasController::class, 'finalizadas'])->name('reservas.finalizadas');
         Route::post('/reservas/actualizar-estado', [ReservasController::class, 'actualizarEstado'])->name('reservas.actualizar_estado');
+        Route::get('/reservas/del-dia',     [ReservasController::class, 'reservasDelDia'])->name('reservas.del_dia');
         Route::get('/copia-seguridad', [BackupController::class, 'menu'])->name('copia_seguridad.menu');
         Route::get('/usuarios',             fn() => 'próximamente')->name('usuarios.index');
     });
