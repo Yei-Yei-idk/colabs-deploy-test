@@ -113,4 +113,33 @@ class ReservasController extends Controller
 
         return response()->json($reservas);
     }
+
+    /**
+     * Ejecuta la actualización automática de estados.
+     * Llamado por el JS del layout admin cada 60 segundos,
+     * sin depender del Scheduler ni de un cron del servidor.
+     * POST /admin/reservas/sincronizar-estados
+     */
+    public function sincronizarEstados()
+    {
+        $ahora = Carbon::now();
+
+        $estadosAfinalizar = ['activa', 'Activa', 'aceptada', 'Aceptada', 'pendiente', 'Pendiente'];
+
+        $actualizadas = Reserva::whereIn('rsva_estado', $estadosAfinalizar)
+            ->where(function ($query) use ($ahora) {
+                $query->whereDate('rsva_fecha', '<', $ahora->toDateString())
+                    ->orWhere(function ($q) use ($ahora) {
+                        $q->whereDate('rsva_fecha', $ahora->toDateString())
+                          ->whereTime('rsva_hora_fin', '<=', $ahora->toTimeString());
+                    });
+            })
+            ->update(['rsva_estado' => 'finalizada']);
+
+        return response()->json([
+            'ok'          => true,
+            'actualizadas' => $actualizadas,
+            'hora'        => $ahora->format('H:i:s'),
+        ]);
+    }
 }

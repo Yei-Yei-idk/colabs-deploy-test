@@ -121,5 +121,37 @@
 </style>
 
 @yield('scripts')
+
+{{-- ===== AUTO-SINCRONIZACIÓN DE ESTADOS DE RESERVAS ===== --}}
+{{-- Llama al servidor cada 60 s para marcar como "finalizada" las reservas vencidas --}}
+<script>
+(function () {
+    const URL   = "{{ route('admin.reservas.sincronizar_estados') }}";
+    const TOKEN = document.querySelector('meta[name="csrf-token"]')?.content
+               ?? "{{ csrf_token() }}";
+
+    function sincronizar() {
+        fetch(URL, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': TOKEN,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.actualizadas > 0) {
+                console.info(`[Colabs] ${data.actualizadas} reserva(s) finalizadas a las ${data.hora}`);
+            }
+        })
+        .catch(() => {}); // silenciar errores de red
+    }
+
+    // Ejecutar de inmediato al cargar la página y luego cada 60 segundos
+    sincronizar();
+    setInterval(sincronizar, 60_000);
+})();
+</script>
 </body>
 </html>
