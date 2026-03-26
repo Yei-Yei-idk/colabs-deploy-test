@@ -43,6 +43,13 @@
                     Capacidad: {{ $r->espacio->esp_capacidad ?? '?' }} Persona(s)
                 </div>
             </div>
+
+            @if($r->rsva_descripcion)
+                <div class="reserva-description">
+                    <span class="description-label">Descripción del cliente:</span>
+                    {{ $r->rsva_descripcion }}
+                </div>
+            @endif
             
             <div class="reserva-details">
                 <div class="detail-item">

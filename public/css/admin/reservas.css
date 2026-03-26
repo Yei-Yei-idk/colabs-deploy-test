@@ -158,6 +158,27 @@
     gap: 6px;
 }
 
+/* Descripción de la Reserva */
+.reserva-description {
+    background: #fdfdfd;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px dashed #e5e7eb;
+    font-size: 0.9rem;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.description-label {
+    font-weight: 700;
+    color: #6b7280;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
 /* Footer / Acciones */
 .reserva-footer {
     margin-top: auto;
