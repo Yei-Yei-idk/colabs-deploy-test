@@ -20,11 +20,12 @@ class ActualizarEstadoReservas extends Command
     {
         $ahora = Carbon::now();
 
-        $actualizadas = Reserva::where('rsva_estado', 'activa')
+        // Estados que deben pasar a "finalizada" cuando el tiempo expire
+        $estadosAfinalizar = ['activa', 'Activa', 'aceptada', 'Aceptada', 'pendiente', 'Pendiente'];
+
+        $actualizadas = Reserva::whereIn('rsva_estado', $estadosAfinalizar)
             ->where(function ($query) use ($ahora) {
-                // Caso 1: la fecha de la reserva ya pasó
                 $query->whereDate('rsva_fecha', '<', $ahora->toDateString())
-                    // Caso 2: es hoy pero la hora de fin ya pasó
                     ->orWhere(function ($q) use ($ahora) {
                         $q->whereDate('rsva_fecha', $ahora->toDateString())
                           ->whereTime('rsva_hora_fin', '<=', $ahora->toTimeString());
