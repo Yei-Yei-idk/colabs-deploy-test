@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\IniciarSesionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EspaciosController;
 use App\Http\Controllers\Admin\ReservasController;
-use App\Http\Controllers\Admin\BackupController;
+use App\Http\Controllers\BackupController;
 
 // ===================== RUTAS =====================
 
@@ -64,6 +64,12 @@ Route::prefix('admin')
         Route::put('/espacios/{id}', [EspaciosController::class, 'update'])->name('espacios.update');
         Route::post('/espacios/{id}/toggle', [EspaciosController::class, 'toggleStatus'])->name('espacios.toggle');
 
+        //copia de seguridad
+        Route::get('/copias', [BackupController::class, 'menu'])
+            ->name('copias');
+        Route::post('/backup/create', [BackupController::class, 'create'])
+            ->name('backup.create');
+
         // Los siguientes controladores se irán creando en las próximas migraciones:
         Route::get('/reservas',             [ReservasController::class, 'index'])->name('reservas.index');
         Route::get('/reservas/pendientes',  [ReservasController::class, 'pendientes'])->name('reservas.pendientes');
@@ -71,6 +77,5 @@ Route::prefix('admin')
         Route::post('/reservas/actualizar-estado',    [ReservasController::class, 'actualizarEstado'])->name('reservas.actualizar_estado');
         Route::get('/reservas/del-dia',              [ReservasController::class, 'reservasDelDia'])->name('reservas.del_dia');
         Route::post('/reservas/sincronizar-estados', [ReservasController::class, 'sincronizarEstados'])->name('reservas.sincronizar_estados');
-        Route::get('/copia-seguridad', [BackupController::class, 'menu'])->name('copia_seguridad.menu');
         Route::get('/usuarios',             fn() => 'próximamente')->name('usuarios.index');
     });
