@@ -76,7 +76,7 @@
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
                 @csrf
             </form>
-            <button class="new-btn" onclick="document.getElementById('logout-form').submit()">
+            <button class="new-btn" onclick="document.getElementById('logout-modal').style.display='flex'">
                 Cerrar Sesión
             </button>
         </div>
@@ -88,6 +88,37 @@
     </main>
 
 </div>{{-- /.main-wrapper --}}
+
+{{-- ===== MODAL CONFIRMAR CIERRE DE SESIÓN ===== --}}
+<div id="logout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:16px; padding:2rem 2.5rem; max-width:380px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.18); text-align:center; animation:fadeInUp .2s ease;">
+        <div style="font-size:2.5rem; margin-bottom:.5rem;">🔒</div>
+        <h3 style="margin:0 0 .5rem; font-size:1.2rem; color:#1a1a2e;">¿Cerrar sesión?</h3>
+        <p style="margin:0 0 1.5rem; color:#6b7280; font-size:.95rem;">¿Estás seguro de que deseas cerrar tu sesión como administrador?</p>
+        <div style="display:flex; gap:.75rem; justify-content:center;">
+            <button
+                onclick="document.getElementById('logout-modal').style.display='none'"
+                style="padding:.6rem 1.4rem; border-radius:8px; border:none; background:#9ca3af; color:#fff; font-size:.95rem; cursor:pointer; font-weight:600; transition:background .2s;"
+                onmouseover="this.style.background='#6b7280'" onmouseout="this.style.background='#9ca3af'">
+                Cancelar
+            </button>
+            <button
+                onclick="document.getElementById('logout-form').submit()"
+                style="padding:.6rem 1.4rem; border-radius:8px; border:none; background:#ef4444; color:#fff; font-size:.95rem; cursor:pointer; font-weight:600; transition:background .2s;"
+                onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#ef4444'">
+                Sí, cerrar sesión
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes fadeInUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+#logout-modal { backdrop-filter: blur(3px); }
+</style>
 
 @yield('scripts')
 </body>
