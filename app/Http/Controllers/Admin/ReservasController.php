@@ -10,30 +10,53 @@ use Illuminate\Http\Request;
 
 class ReservasController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | MÉTODO PRIVADO — se llama al inicio de todos los métodos de reservas
+    |--------------------------------------------------------------------------
+    | Busca en la BD todas las reservas con estado activo cuya fecha/hora
+    | de fin ya pasó y las marca como "finalizada".
+    | Usa la hora real de Colombia gracias a 'timezone' => 'America/Bogota'
+    | definido en config/app.php
+    */
+    private function actualizarVencidas(): void
+    {
+        $ahora = Carbon::now(); // America/Bogota
+
+        Reserva::whereIn('rsva_estado', ['activa', 'Activa', 'aceptada', 'Aceptada'])
+            ->where(function ($q) use ($ahora) {
+                // Caso 1: la fecha de la reserva ya pasó (ayer o antes)
+                $q->whereDate('rsva_fecha', '<', $ahora->toDateString())
+                  // Caso 2: es hoy pero la hora de fin ya pasó
+                  ->orWhere(function ($q2) use ($ahora) {
+                      $q2->whereDate('rsva_fecha', $ahora->toDateString())
+                         ->whereTime('rsva_hora_fin', '<=', $ahora->toTimeString());
+                  });
+            })
+            ->update(['rsva_estado' => 'finalizada']);
+    }
+
     /**
      * Calendario principal de reservas del día.
-     * Equivalente a Reservas_SU.php
      */
     public function index(Request $request)
     {
+        $this->actualizarVencidas(); // ← actualiza DB antes de leer
+
         Carbon::setLocale('es');
-        // Manejo de fecha con Carbon (reemplaza strtotime + date())
         $fechaInput = $request->input('fecha', Carbon::today()->format('Y-m-d'));
         $fecha      = Carbon::parse($fechaInput)->locale('es');
 
         $fechaAnterior  = $fecha->copy()->subDay()->format('Y-m-d');
         $fechaSiguiente = $fecha->copy()->addDay()->format('Y-m-d');
 
-        // SELECT * FROM espacios
         $espacios = Espacio::all();
 
-        // SELECT * FROM reserva WHERE rsva_fecha = '$fecha'
-        // Solo estados activos para el calendario
         $reservas = Reserva::whereDate('rsva_fecha', $fecha->format('Y-m-d'))
-            ->with('usuario') // Cargar la relación con el usuario
+            ->with('usuario')
             ->whereIn('rsva_estado', ['activa', 'aceptada', 'Activa', 'Aceptada', 'pendiente', 'Pendiente'])
             ->get()
-            ->groupBy('espacio_id'); // agrupa por espacio para búsqueda rápida en la vista
+            ->groupBy('espacio_id');
 
         return view('admin.reservas.index', compact(
             'espacios',
@@ -46,10 +69,11 @@ class ReservasController extends Controller
 
     /**
      * Lista de reservas pendientes de aprobación.
-     * Equivalente a Pendientes.php
      */
     public function pendientes()
     {
+        $this->actualizarVencidas(); // ← actualiza DB antes de leer
+
         Carbon::setLocale('es');
         $reservas = Reserva::with(['espacio', 'usuario'])
             ->whereIn('rsva_estado', ['Pendiente', 'pendiente'])
@@ -61,13 +85,12 @@ class ReservasController extends Controller
 
     /**
      * Lista de reservas finalizadas.
-     * Equivalente a Finalizadas.php
      */
     public function finalizadas(Request $request)
     {
-        Carbon::setLocale('es');
+        $this->actualizarVencidas(); // ← actualiza DB antes de leer
 
-        // Manejo de fecha con Carbon (reemplaza $_GET['fecha'])
+        Carbon::setLocale('es');
         $fechaInput = $request->input('fecha', Carbon::today()->format('Y-m-d'));
         $fecha      = Carbon::parse($fechaInput)->locale('es');
 
@@ -77,7 +100,7 @@ class ReservasController extends Controller
         $reservas = Reserva::with(['espacio', 'usuario'])
             ->whereDate('rsva_fecha', $fecha->format('Y-m-d'))
             ->whereIn('rsva_estado', ['Finalizada', 'finalizada'])
-            ->orderBy('rsva_fecha', 'desc')
+            ->orderBy('rsva_hora_fin', 'desc')
             ->get();
 
         return view('admin.reservas.finalizadas', compact(
@@ -89,14 +112,14 @@ class ReservasController extends Controller
     }
 
     /**
-     * Actualiza el estado de una reserva (Aceptada/Rechazada).
+     * Cambia el estado manual de una reserva (Aceptada / Rechazada).
      * Reemplaza a nuevo_estado.php
      */
     public function actualizarEstado(Request $request)
     {
         $request->validate([
-            'reserva_id' => 'required|exists:reserva,reserva_id',
-            'nuevo_estado' => 'required|string'
+            'reserva_id'   => 'required|exists:reserva,reserva_id',
+            'nuevo_estado' => 'required|string',
         ]);
 
         $reserva = Reserva::findOrFail($request->reserva_id);
@@ -105,8 +128,14 @@ class ReservasController extends Controller
 
         return back()->with('success', "La reserva #{$reserva->reserva_id} ha sido {$request->nuevo_estado}.");
     }
+
+    /**
+     * JSON con reservas del día actual.
+     */
     public function reservasDelDia()
     {
+        $this->actualizarVencidas();
+
         $reservas = Reserva::with(['espacio', 'usuario'])
             ->whereDate('rsva_fecha', Carbon::today())
             ->get();
@@ -115,31 +144,27 @@ class ReservasController extends Controller
     }
 
     /**
-     * Ejecuta la actualización automática de estados.
-     * Llamado por el JS del layout admin cada 60 segundos,
-     * sin depender del Scheduler ni de un cron del servidor.
+     * Endpoint POST llamado por el JS del layout cada 60 s como respaldo.
      * POST /admin/reservas/sincronizar-estados
      */
     public function sincronizarEstados()
     {
         $ahora = Carbon::now();
 
-        $estadosAfinalizar = ['activa', 'Activa', 'aceptada', 'Aceptada', 'pendiente', 'Pendiente'];
-
-        $actualizadas = Reserva::whereIn('rsva_estado', $estadosAfinalizar)
-            ->where(function ($query) use ($ahora) {
-                $query->whereDate('rsva_fecha', '<', $ahora->toDateString())
-                    ->orWhere(function ($q) use ($ahora) {
-                        $q->whereDate('rsva_fecha', $ahora->toDateString())
-                          ->whereTime('rsva_hora_fin', '<=', $ahora->toTimeString());
-                    });
+        $actualizadas = Reserva::whereIn('rsva_estado', ['activa', 'Activa', 'aceptada', 'Aceptada', 'pendiente', 'Pendiente'])
+            ->where(function ($q) use ($ahora) {
+                $q->whereDate('rsva_fecha', '<', $ahora->toDateString())
+                  ->orWhere(function ($q2) use ($ahora) {
+                      $q2->whereDate('rsva_fecha', $ahora->toDateString())
+                         ->whereTime('rsva_hora_fin', '<=', $ahora->toTimeString());
+                  });
             })
             ->update(['rsva_estado' => 'finalizada']);
 
         return response()->json([
-            'ok'          => true,
+            'ok'           => true,
             'actualizadas' => $actualizadas,
-            'hora'        => $ahora->format('H:i:s'),
+            'hora'         => $ahora->format('H:i:s'),
         ]);
     }
 }
