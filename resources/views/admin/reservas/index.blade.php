@@ -80,7 +80,16 @@
                         }
                     @endphp
 
-                    <td class="{{ $ocupado ? 'reservado' : 'disponible' }}"
+                    @php
+                        $claseCss = 'disponible';
+                        if ($ocupado) {
+                            // Normalizamos a minúsculas para comparar
+                            $estado = strtolower($reservaEncontrada->rsva_estado);
+                            $claseCss = ($estado == 'pendiente') ? 'pendiente' : 'reservado';
+                        }
+                    @endphp
+
+                    <td class="{{ $claseCss }}"
                         data-espacio="{{ $espacio->espacio_id }}"
                         data-hora="{{ $horaActual }}"
                         @if ($ocupado)
@@ -94,7 +103,11 @@
                         @endif>
 
                         @if ($ocupado)
-                            Ocupado<br>
+                            @if(strtolower($reservaEncontrada->rsva_estado) == 'pendiente')
+                                Pendiente<br>
+                            @else
+                                Ocupado<br>
+                            @endif
                             <small>
                                 ({{ \Carbon\Carbon::parse($reservaEncontrada->rsva_hora_inicio)->format('g:i A') }}
                                  –

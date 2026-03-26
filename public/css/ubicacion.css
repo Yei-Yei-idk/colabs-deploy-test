@@ -8,3 +8,13 @@
 .redes { padding: 40px; text-align: center; background: #f4f4f4; }
 .red-item { margin: 20px 0; }
 .red-item img { height: 200px; object-fit: cover; border-radius: 10px; margin: 0 auto; display: block; }
+
+@media (max-width: 768px) {
+    .ubicacion-grid {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .columna-mapa, .columna-info {
+        min-width: 100%;
+    }
+}

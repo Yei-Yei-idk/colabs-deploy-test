@@ -240,6 +240,15 @@
     animation: fadeIn 0.5s ease-out;
 }
 
+@media (max-width: 640px) {
+    .reservas-grid {
+        grid-template-columns: 1fr;
+    }
+    .reserva-card {
+        padding: 16px;
+    }
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

@@ -234,6 +234,12 @@ td {
   text-align: center;
 }
 
+.tabla-reservas td.pendiente {
+  background-color: #facc15;
+  color: #000;
+  text-align: center;
+}
+
 .tabla-reservas td.reservado {
   background-color: #ef4444;
   color: #fff;
@@ -1250,4 +1256,34 @@ td {
 #snackbar.show {
   visibility: visible;
   opacity: 1;
+}
+
+/* ==================== */
+/* MEDIA QUERIES        */
+/* ==================== */
+@media (max-width: 992px) {
+  .stats {
+    flex-wrap: wrap;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+  .main-wrapper {
+    height: auto;
+  }
+  .header {
+    padding: 15px;
+  }
 }

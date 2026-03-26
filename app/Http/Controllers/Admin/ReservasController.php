@@ -31,7 +31,7 @@ class ReservasController extends Controller
         // Solo estados activos para el calendario
         $reservas = Reserva::whereDate('rsva_fecha', $fecha->format('Y-m-d'))
             ->with('usuario') // Cargar la relación con el usuario
-            ->whereIn('rsva_estado', ['activa', 'aceptada', 'Activa', 'Aceptada'])
+            ->whereIn('rsva_estado', ['activa', 'aceptada', 'Activa', 'Aceptada', 'pendiente', 'Pendiente'])
             ->get()
             ->groupBy('espacio_id'); // agrupa por espacio para búsqueda rápida en la vista
 

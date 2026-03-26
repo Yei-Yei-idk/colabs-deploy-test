@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const reservadoCells = document.querySelectorAll('.tabla-reservas td.reservado');
+    // Seleccionamos celdas con clases tanto en minúsculas como con la primera en mayúscula para mayor seguridad
+    const reservaCells = document.querySelectorAll('.tabla-reservas td.reservado, .tabla-reservas td.pendiente, .tabla-reservas td.Pendiente, .tabla-reservas td.Reservado');
     let tooltip = document.getElementById('reserva-tooltip');
 
     if (!tooltip) {
@@ -9,16 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(tooltip);
     }
 
-    reservadoCells.forEach(cell => {
+    reservaCells.forEach(cell => {
         cell.addEventListener('mouseenter', () => {
             const userName = cell.dataset.userName || 'N/A';
             const userEmail = cell.dataset.userEmail || 'N/A';
             const espacioNombre = cell.dataset.espacioNombre || 'N/A';
             const reservaId = cell.dataset.reservaId || 'N/A';
             const userPhone = cell.dataset.userPhone || 'N/A';
+            
+            // Verificamos el estado de forma más robusta
+            const esPendiente = cell.classList.contains('pendiente') || cell.classList.contains('Pendiente');
+            const estado = esPendiente ? 'Pendiente de Aprobación' : 'Reserva Confirmada';
 
             tooltip.innerHTML = `
                 <p><strong>Reserva ID:</strong> ${reservaId}</p>
+                <p><strong>Estado:</strong> ${estado}</p>
                 <p><strong>Espacio:</strong> ${espacioNombre}</p>
                 <p><strong>Usuario:</strong> ${userName}</p>
                 <p><strong>Email:</strong> ${userEmail}</p>

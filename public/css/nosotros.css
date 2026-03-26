@@ -96,3 +96,13 @@
 .columna-item p {
     color: #333;
 }
+
+@media (max-width: 768px) {
+    .mision, .vision, .porque {
+        padding: 40px 5%;
+    }
+    .columna-item {
+        max-width: 100%;
+        min-width: 100%;
+    }
+}

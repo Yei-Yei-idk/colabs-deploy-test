@@ -2951,3 +2951,36 @@ nav img {
 .green { background-color: #2ecc71 !important; color: #ffffff !important; }
 .orange { background-color: #e67e22 !important; color: #ffffff !important; }
 .blue { background-color: #3498db !important; color: #ffffff !important; }
+
+/* ─────────────── MEDIA QUERIES CLIENTE ─────────────── */
+@media (max-width: 1024px) {
+  .reservar-container {
+    flex-direction: column;
+  }
+  .left-section {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 20px;
+  }
+  .right-section {
+    width: 100%;
+    flex-shrink: 1;
+  }
+  .main-image {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  header nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .menu {
+    gap: 10px;
+    font-size: 13px;
+  }
+  .hero-text h2 {
+    font-size: 28px;
+  }
+}
