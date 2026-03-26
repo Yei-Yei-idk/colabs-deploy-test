@@ -130,6 +130,36 @@ class ReservasController extends Controller
     }
 
     /**
+     * Actualiza la hora de fin de una reserva desde el UI del calendario (para extender o acortar).
+     */
+    public function actualizarHora(Request $request)
+    {
+        $request->validate([
+            'reserva_id'    => 'required|exists:reserva,reserva_id',
+            'nueva_hora_fin'=> 'required|date_format:H:i'
+        ]);
+
+        $reserva = Reserva::findOrFail($request->reserva_id);
+        $reserva->rsva_hora_fin = $request->nueva_hora_fin . ':00';
+        
+        $ahora = Carbon::now();
+        $horaFinDT = Carbon::parse($reserva->rsva_fecha . ' ' . $reserva->rsva_hora_fin);
+
+        // Si extendemos la reserva al futuro y estaba finalizada, la reactivamos
+        if ($horaFinDT->greaterThan($ahora) && strtolower($reserva->rsva_estado) == 'finalizada') {
+            $reserva->rsva_estado = 'activa';
+        } 
+        // Si acortamos la reserva al pasado/presente, la marcamos finalizada
+        else if ($horaFinDT->lessThanOrEqualTo($ahora)) {
+            $reserva->rsva_estado = 'finalizada';
+        }
+
+        $reserva->save();
+
+        return back()->with('success', "La hora de la reserva #{$reserva->reserva_id} ha sido actualizada exitosamente.");
+    }
+
+    /**
      * JSON con reservas del día actual.
      */
     public function reservasDelDia()

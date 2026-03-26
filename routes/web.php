@@ -75,6 +75,7 @@ Route::prefix('admin')
         Route::get('/reservas/pendientes',  [ReservasController::class, 'pendientes'])->name('reservas.pendientes');
         Route::get('/reservas/finalizadas', [ReservasController::class, 'finalizadas'])->name('reservas.finalizadas');
         Route::post('/reservas/actualizar-estado',    [ReservasController::class, 'actualizarEstado'])->name('reservas.actualizar_estado');
+        Route::post('/reservas/actualizar-hora',      [ReservasController::class, 'actualizarHora'])->name('reservas.actualizar_hora');
         Route::get('/reservas/del-dia',              [ReservasController::class, 'reservasDelDia'])->name('reservas.del_dia');
         Route::post('/reservas/sincronizar-estados', [ReservasController::class, 'sincronizarEstados'])->name('reservas.sincronizar_estados');
         Route::get('/usuarios',             fn() => 'próximamente')->name('usuarios.index');
