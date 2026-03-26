@@ -160,6 +160,8 @@
 
 /* Descripción de la Reserva */
 .reserva-description {
+    overflow-wrap: break-word;
+    word-break: break-all;
     background: #fdfdfd;
     padding: 14px;
     border-radius: 12px;
@@ -265,6 +267,7 @@
     .reservas-grid {
         grid-template-columns: 1fr;
     }
+
     .reserva-card {
         padding: 16px;
     }
