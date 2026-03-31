@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\Auth\RegistrarseController;
 use App\Http\Controllers\Auth\IniciarSesionController;
+use App\Http\Controllers\Auth\RecuperarContrasenaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EspaciosController;
 use App\Http\Controllers\Admin\ReservasController;
@@ -25,6 +27,16 @@ Route::post('/registrarse', [RegistrarseController::class, 'guardar'])->name('re
 // Inicio de sesión (equivalente a login.php)
 Route::get('/login', [IniciarSesionController::class, 'mostrarFormulario'])->name('login');
 Route::post('/login', [IniciarSesionController::class, 'autenticar'])->name('login.autenticar');
+
+// Recuperación de contraseña (solo para usuarios no autenticados)
+Route::middleware('guest')->group(function () {
+    Route::get('/recuperar-contrasena', function () {
+        return view('auth.recuperar-contrasena');
+    })->name('password.request');
+    Route::post('/recuperar-contrasena', [RecuperarContrasenaController::class, 'forgotPassword'])->name('password.email');
+    Route::get('/restablecer-contrasena', [RecuperarContrasenaController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/restablecer-contrasena', [RecuperarContrasenaController::class, 'resetPassword'])->name('password.update');
+});
 
 Route::prefix('cliente')->name('cliente.')->middleware(['auth', 'es.cliente'])->group(function () {
     Route::get('/', [ClienteController::class, 'index'])->name('index');

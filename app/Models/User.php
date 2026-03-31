@@ -46,6 +46,22 @@ class User extends Authenticatable
     {
         return 'user_contrasena';
     }
+
+    /**
+     * Get the e-mail address where password reset links are sent.
+     */
+    public function getEmailForPasswordReset()
+    {
+        return $this->user_correo;
+    }
+
+    /**
+     * Route notifications for the mail channel.
+     */
+    public function routeNotificationForMail($notification = null)
+    {
+        return $this->user_correo;
+    }
     
     public function getAvatarColorAttribute()
     {
