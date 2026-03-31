@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ─────────────── TOKENS ─────────────── */
 :root {
@@ -1374,11 +1374,7 @@ nav img {
   box-shadow: 0 0 0 4px rgba(255, 214, 0, .4);
 }
 
-.verificado {
-  color: green;
-  font-weight: 700;
-  margin-top: 10px;
-}
+
 
 .perfil-right {
   flex: 2;
@@ -2983,4 +2979,14 @@ nav img {
   .hero-text h2 {
     font-size: 28px;
   }
+}
+
+/* =========================================
+   Hero Responsive
+   ========================================= */
+@media (max-width: 768px) {
+    .hero-text {
+        text-align: center;
+        padding: 0 15px;
+    }
 }

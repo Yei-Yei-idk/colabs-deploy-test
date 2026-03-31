@@ -32,6 +32,7 @@ class IniciarSesionController extends Controller
 
         $loginInput = $request->input('user');
         $password   = $request->input('contra');
+        $remember   = $request->boolean('remember'); // Recolecta el valor del checkbox
 
         // Buscar usuario por cédula (user_id) o por correo (user_correo)
         $usuario = User::where('user_id', $loginInput)
@@ -49,7 +50,7 @@ class IniciarSesionController extends Controller
         if (! Auth::attempt([
             'user_correo' => $usuario->user_correo,
             'password'    => $password,
-        ], false)) {
+        ], $remember)) {
             return back()
                 ->withInput($request->only('user'))
                 ->withErrors(['user' => 'Usuario o contraseña incorrectos']);

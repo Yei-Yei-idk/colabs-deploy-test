@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class RegistrarseController extends Controller
 {
@@ -50,7 +52,7 @@ class RegistrarseController extends Controller
 
         // Crear usuario con Eloquent; el hash se aplica automáticamente
         // porque en el modelo User el campo user_contrasena está casteado como "hashed".
-        User::create([
+        $usuario = User::create([
             'user_id'         => $validated['user_id'],
             'user_nombre'     => $validated['user_nombre'],
             'user_correo'     => $validated['user_correo'],
@@ -59,9 +61,17 @@ class RegistrarseController extends Controller
             'rol_id'          => 3,
         ]);
 
+        // Iniciar sesión con el usuario recién creado para que pueda entrar al dashboard bloqueado "verificar correo"
+        Auth::login($usuario);
+
+        // Disparar el evento de validación nativo de Laravel para forzar a que envíen el correo
+        event(new Registered($usuario));
+
+        // En lugar de redirigir a Login o Dashboard lo enviamos a la pantalla de "Espera"
+        // (Aunque si no estuviera verificado el middleware verified lo atajaría de todos modos).
         return redirect()
-            ->route('login')
-            ->with('status', '✔️ Registro guardado con éxito');
+            ->route('verification.notice')
+            ->with('status', '✔️ Cuenta creada. Revisa tu correo electrónico para verificarla.');
     }
 }
 

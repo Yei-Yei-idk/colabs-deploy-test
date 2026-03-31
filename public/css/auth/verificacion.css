@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.isolated-verify-container {
+    min-height: 100vh;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background-color: #f4f4f2;
+    padding: 40px 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+.verify-card-premium {
+    background: #ffffff;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    animation: popInModal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes popInModal {
+    0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.card-body {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(250, 204, 21, 0.12);
+    display: inline-block;
+    text-align: center;
+    line-height: 56px;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.card-title {
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.card-text {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0 0 28px;
+}
+
+.card-text strong {
+    color: #111827;
+}
+
+.btn-gold-pill {
+    display: inline-block;
+    width: 100%;
+    background: linear-gradient(90deg, #facc15, #eab308);
+    color: #000000;
+    text-decoration: none;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    box-shadow: 0 10px 22px rgba(250, 204, 21, 0.35);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 20px;
+}
+
+.btn-gold-pill:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(250, 204, 21, 0.45);
+}
+
+.btn-gold-pill:disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn-ghost:hover {
+    color: #111827;
+    text-decoration: underline;
+}
+
+.card-footer {
+    background: #000000;
+    padding: 20px 32px;
+    text-align: center;
+}
+
+.footer-text {
+    color: #6b7280;
+    font-size: 11px;
+    margin: 0 0 4px;
+}
+
+.footer-subtext {
+    color: #4b5563;
+    font-size: 10px;
+    margin: 0;
+}
+
+.alert-box {
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.alert-success {
+    border-color: #10b981;
+    background-color: #ecfdf5;
+}
+
+.alert-error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.alert-text {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.alert-success .alert-text { color: #065f46; }
+.alert-error .alert-text { color: #991b1b; }

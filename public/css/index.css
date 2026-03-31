@@ -447,6 +447,27 @@ footer a:hover { text-decoration: underline; }
   }
 }
 
+/* ─────────────── AUTH FORM UTILS ─────────────── */
+.auth-remember-wrapper {
+    margin-top: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.auth-label-checkbox {
+    font-size: 14px;
+    color: #4b5563;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-label-checkbox input[type="checkbox"] {
+    width: auto !important;
+    height: auto !important;
+}
+
 /* ─────────────── AUTH: REGISTRARSE ─────────────── */
 .auth-registrarse {
   min-height: calc(100vh - 80px - 72px); /* header (padding-top body) + footer aprox */

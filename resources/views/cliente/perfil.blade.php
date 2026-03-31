@@ -29,7 +29,7 @@
             </div>
             <h3>{{ $usuario->first_name ?? $usuario->name ?? 'Usuario' }}</h3>
             <p class="correo">{{ $usuario->user_correo ?? $usuario->email ?? '' }}</p>
-            <p class="verificado">✓ Cuenta Verificada</p>
+
         </div>
 
         <div class="perfil-right">

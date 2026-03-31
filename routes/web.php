@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\Auth\RegistrarseController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EspaciosController;
 use App\Http\Controllers\Admin\ReservasController;
 use App\Http\Controllers\BackupController;
+use Illuminate\Http\Request;
 
 // ===================== RUTAS =====================
 
@@ -38,7 +38,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/restablecer-contrasena', [RecuperarContrasenaController::class, 'resetPassword'])->name('password.update');
 });
 
-Route::prefix('cliente')->name('cliente.')->middleware(['auth', 'es.cliente'])->group(function () {
+// ===================== RUTAS DE VERIFICACIÓN DE CORREO =====================
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', [App\Http\Controllers\Auth\VerificacionController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{token}', [App\Http\Controllers\Auth\VerificacionController::class, 'verify'])->name('verification.verify');
+    Route::post('/email/verification-notification', [App\Http\Controllers\Auth\VerificacionController::class, 'send'])->name('verification.send');
+});
+
+Route::prefix('cliente')->name('cliente.')->middleware(['auth', 'verified', 'es.cliente'])->group(function () {
     Route::get('/', [ClienteController::class, 'index'])->name('index');
     Route::get('/buscar', [ClienteController::class, 'buscarEspacios'])->name('buscar_espacios');
     Route::get('/reservas', [ClienteController::class, 'misReservas'])->name('mis_reservas');
@@ -53,7 +60,7 @@ Route::prefix('cliente')->name('cliente.')->middleware(['auth', 'es.cliente'])->
     Route::post('/confirmar-reserva', [ClienteController::class, 'confirmarReserva'])->name('confirmar_reserva');
 });
 
-Route::post('/logout', function (\Illuminate\Http\Request $request) {
+Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();

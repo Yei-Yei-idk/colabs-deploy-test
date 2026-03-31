@@ -39,7 +39,12 @@
                     class="mi-input"
                     
                 >
-                <br><br>
+                <div class="auth-remember-wrapper">
+                    <label class="auth-label-checkbox">
+                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                        Recordarme en este equipo
+                    </label>
+                </div>
 
                 <button type="submit" name="login" class="btn-login">
                     Ingresar
