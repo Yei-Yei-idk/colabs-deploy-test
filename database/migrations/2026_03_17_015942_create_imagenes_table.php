@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('imagenes', function (Blueprint $table) {
             $table->integer('img_id', true);
-            $table->integer('espacio_id')->index('espacio_id');
+            $table->integer('espacio_id')->index();
             $table->binary('foto');
         });
     }
