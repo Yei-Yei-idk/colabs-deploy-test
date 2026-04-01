@@ -56,6 +56,8 @@ class InicioController extends Controller
 
     public function servicios()
     {
-        return view('servicios');
+        // Mostrar todos los espacios activos
+        $espacios = \App\Models\Espacio::where('esp_estado', 'Activo')->get();
+        return view('servicios', compact('espacios'));
     }
 }

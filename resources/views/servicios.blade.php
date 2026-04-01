@@ -19,23 +19,15 @@
 </center>
 
 <div class="grid-espacios">
-    <article class="espacio-card">
-        <img src="{{ asset('ASSETS/OF12.jpeg') }}" alt="Oficinas personales" loading="lazy">
-        <h3>| OFICINAS PERSONALES |</h3>
-    </article>
-    <article class="espacio-card">
-        <img src="{{ asset('ASSETS/ofic 11.jpeg') }}" alt="Sala de reuniones" loading="lazy">
-        <h3>| SALAS DE REUNIONES |</h3>
-    </article>
-    <article class="espacio-card">
-        <img src="{{ asset('ASSETS/Of 14 puestos de trabajo .jpeg') }}" alt="Oficinas compartidas" loading="lazy">
-        <h3>| OFICINAS COMPARTIDAS |</h3>
-    </article>
-    <article class="espacio-card">
-        <!-- Ojo con el nombre de este archivo, tiene espacios -->
-        <img src="{{ asset('ASSETS/WhatsApp Image 2025-09-05 at 11.24.18 AM.jpeg') }}" alt="Cafetería" loading="lazy">
-        <h3>| CAFETERÍA |</h3>
-    </article>
+    @forelse($espacios as $espacio)
+        <article class="espacio-card">
+            <img src="{{ asset('ASSETS/' . ($espacio->imagen->nombre_archivo ?? 'default.jpg')) }}" alt="{{ $espacio->esp_nombre }}" loading="lazy">
+            <h3>| {{ strtoupper($espacio->esp_nombre) }} |</h3>
+            <p>{{ $espacio->esp_descripcion }}</p>
+        </article>
+    @empty
+        <p style="color:#333;">No hay espacios disponibles en este momento.</p>
+    @endforelse
 </div>
 
 <div class="container-benef">
