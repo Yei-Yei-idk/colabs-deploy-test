@@ -71,6 +71,13 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected static function booted()
     {
+        static::creating(function ($user) {
+            // Si el usuario es administrador (Super-Admin o Admin), lo marcamos como verificado por defecto
+            if (in_array($user->rol_id, [1, 2])) {
+                $user->email_verified_at = now();
+            }
+        });
+
         static::updating(function ($user) {
             if ($user->isDirty('user_correo')) {
                 $user->email_verified_at = null;

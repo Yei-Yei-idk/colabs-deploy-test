@@ -151,3 +151,133 @@
 
 .alert-success .alert-text { color: #065f46; }
 .alert-error .alert-text { color: #991b1b; }
+
+/* Form Cambiar Correo */
+.form-cambiar-correo {
+    margin-top: 28px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group-last {
+    margin-bottom: 28px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.form-input-disabled {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #f8fafc;
+    color: #94a3b8;
+}
+
+.form-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.form-button-submit {
+    width: 100%;
+    background: var(--y);
+    color: #000;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.form-button-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(250, 204, 21, 0.25);
+}
+
+.form-button-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #475569;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.form-button-back:hover {
+    border-color: #cbd5e1;
+    background: #f1f5f9;
+}
+
+.form-footer {
+    margin-top: 32px;
+    color: #9ca3af;
+    font-size: 11px;
+    text-align: center;
+}
+
+.form-footer strong {
+    font-weight: 700;
+}
+
+.btn-change-email {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+    gap: 6px;
+    text-decoration: none;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.btn-change-email:hover {
+    border-color: #cbd5e1;
+    color: #475569;
+    background: #f8fafc;
+}

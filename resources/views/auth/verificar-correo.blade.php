@@ -9,8 +9,7 @@
 @section('content')
     <section class="isolated-verify-container" 
              data-verificacion-config 
-             data-intentos="{{ $intentosReales ?? 0 }}" 
-             data-recien-enviado="{{ session('status') == 'verification-link-sent' ? 'true' : 'false' }}">
+             data-last-email-sent="{{ session('last_email_sent_at') ?? 0 }}">
              
         <div class="verify-card-premium">
             <!-- Body -->
@@ -39,6 +38,14 @@
                     La confidencialidad es nuestra prioridad. Por favor confirma la propiedad de tu cuenta haciendo clic en el enlace que enviamos a <strong>{{ auth()->user()->user_correo }}</strong>.
                 </p>
 
+                @if (session('status') == 'verification-email-changed')
+                    <div class="alert-box alert-success">
+                        <p class="alert-text">
+                            ✅ Se ha enviado un nuevo enlace de verificación a tu nuevo correo. Por favor revisa tu bandeja de entrada.
+                        </p>
+                    </div>
+                @endif
+
                 @php
                     $intentosReales = session('intentos') ?? \Illuminate\Support\Facades\Session::get('reenvios_verificacion', 0);
                 @endphp
@@ -58,6 +65,11 @@
                         </button>
                     </form>
                 @endif
+
+                <!-- Botón para cambiar correo -->
+                <a href="{{ route('verification.form-cambiar-correo') }}" class="btn-change-email">
+                    ✏️ Cambiar correo
+                </a>
 
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf

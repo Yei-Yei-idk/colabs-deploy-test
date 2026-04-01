@@ -43,14 +43,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify', [App\Http\Controllers\Auth\VerificacionController::class, 'notice'])->name('verification.notice');
     Route::get('/email/verify/{id}/{token}', [App\Http\Controllers\Auth\VerificacionController::class, 'verify'])->name('verification.verify');
     Route::post('/email/verification-notification', [App\Http\Controllers\Auth\VerificacionController::class, 'send'])->name('verification.send');
+    Route::get('/email/cambiar-correo', [App\Http\Controllers\Auth\VerificacionController::class, 'formCambiarCorreo'])->name('verification.form-cambiar-correo');
+    Route::post('/email/cambiar-correo', [App\Http\Controllers\Auth\VerificacionController::class, 'cambiarCorreo'])->name('verification.cambiar-correo');
+});
+
+Route::middleware(['auth', 'es.cliente'])->group(function () {
+    Route::get('/cliente/perfil', [ClienteController::class, 'perfil'])->name('cliente.perfil');
+    Route::post('/cliente/perfil', [ClienteController::class, 'actualizarPerfil'])->name('cliente.perfil.actualizar');
 });
 
 Route::prefix('cliente')->name('cliente.')->middleware(['auth', 'verified', 'es.cliente'])->group(function () {
     Route::get('/', [ClienteController::class, 'index'])->name('index');
     Route::get('/buscar', [ClienteController::class, 'buscarEspacios'])->name('buscar_espacios');
     Route::get('/reservas', [ClienteController::class, 'misReservas'])->name('mis_reservas');
-    Route::get('/perfil', [ClienteController::class, 'perfil'])->name('perfil');
-    Route::post('/perfil', [ClienteController::class, 'actualizarPerfil'])->name('perfil.actualizar');
     Route::get('/reserva/{id}', [ClienteController::class, 'detallesReserva'])->name('detalles_reserva');
     Route::post('/reserva/cancelar', [ClienteController::class, 'cancelarReserva'])->name('cancelar_reserva');
     Route::post('/calificar', [ClienteController::class, 'calificarEspacio'])->name('calificar');

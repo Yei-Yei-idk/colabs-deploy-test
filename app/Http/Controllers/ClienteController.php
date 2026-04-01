@@ -9,6 +9,7 @@ use App\Models\Espacio;
 use App\Models\Reserva;
 use App\Models\Calificacion;
 use App\Models\Imagen;
+// use App\Notifications\ReservaStatusChanged; (Quitado: ahora se usa el Observer)
 
 class ClienteController extends Controller
 {
@@ -75,6 +76,17 @@ class ClienteController extends Controller
     public function perfil()
     {
         $usuario = Auth::user();
+        
+        // Verificar que el usuario esté autenticado
+        if (!$usuario) {
+            return redirect()->route('login');
+        }
+        
+        // Si el correo no está verificado, redirigir a verificación
+        if (!$usuario->email_verified_at) {
+            return redirect()->route('verification.notice');
+        }
+        
         return view('cliente.perfil', compact('usuario'));
     }
 
@@ -106,9 +118,30 @@ class ClienteController extends Controller
             $updateData['user_contrasena'] = bcrypt($request->newpassword);
         }
 
-        DB::table('usuarios')->where('user_id', $user_id)->update($updateData);
+        $user = \App\Models\User::findOrFail($user_id);
+        $oldEmail = $user->user_correo;
 
-        return redirect()->route('cliente.perfil')->with('success', '✅ Perfil actualizado correctamente');
+        $user->user_nombre = $request->nombre;
+        $user->user_correo = $request->email;
+        $user->user_telefono = $request->telefono;
+
+        if ($request->filled('password') && $request->filled('newpassword')) {
+            // Se asume que el campo 'newpassword' es el que contiene la nueva clave
+            $user->user_contrasena = bcrypt($request->newpassword);
+        }
+
+        $user->save();
+
+        // Si el correo cambió, el evento 'booted' en User.php ya puso email_verified_at en null.
+        // Ahora disparamos la notificación de verificación si no está verificado.
+        if ($user->user_correo !== $oldEmail) {
+            $user->sendEmailVerificationNotification();
+            $msg = '✅ Perfil actualizado. Se ha enviado un nuevo correo de verificación a su nueva dirección.';
+        } else {
+            $msg = '✅ Perfil actualizado correctamente';
+        }
+
+        return redirect()->route('cliente.perfil')->with('success', $msg);
     }
 
     public function detallesReserva($id)
@@ -153,7 +186,8 @@ class ClienteController extends Controller
             ->firstOrFail();
 
         if ($reserva->rsva_estado === 'Pendiente') {
-            $reserva->update(['rsva_estado' => 'Cancelada']);
+            $reserva->update(['rsva_estado' => 'Cancelada']); // Esto disparará el Observer
+            
             return redirect()->route('cliente.mis_reservas')->with('success', '✅ Tu reserva ha sido cancelada correctamente.');
         } elseif ($reserva->rsva_estado === 'Aceptada') {
             return back()->with('error', '⚠️ No puedes cancelar una reserva que ya ha sido aceptada. Contacta al administrador.');
@@ -234,7 +268,12 @@ class ClienteController extends Controller
         }
 
         // Validar que no sea en el pasado
-        $fechaHoraInicio = \Carbon\Carbon::parse($fecha . ' ' . $hora_inicio);
+        // Usar createFromFormat para respetar la timezone de la aplicación
+        $fechaHoraInicio = \Carbon\Carbon::createFromFormat(
+            'Y-m-d H:i',
+            $fecha . ' ' . $hora_inicio,
+            config('app.timezone')
+        );
         if ($fechaHoraInicio->isPast()) {
             return response()->json([
                 'disponible' => false,
@@ -379,7 +418,11 @@ class ClienteController extends Controller
     public function confirmarReserva(Request $request)
     {
         // Validar que no sea en el pasado
-        $fechaHoraInicio = \Carbon\Carbon::parse($request->fecha . ' ' . $request->hora_inicio);
+        $fechaHoraInicio = \Carbon\Carbon::createFromFormat(
+            'Y-m-d H:i',
+            $request->fecha . ' ' . $request->hora_inicio,
+            config('app.timezone')
+        );
         if ($fechaHoraInicio->isPast()) {
             return back()->with('error', '⚠️ No puedes realizar reservas en el pasado.');
         }
@@ -413,7 +456,7 @@ class ClienteController extends Controller
             }
         }
 
-        // Crear la reserva con Eloquent
+        // Crear la reserva con Eloquent. El Observer disparará el correo Pendiente.
         Reserva::create([
             'user_id' => Auth::id(),
             'espacio_id' => $request->espacio_id,

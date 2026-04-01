@@ -15,6 +15,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable()->after('user_telefono');
             $table->rememberToken()->after('rol_id');
         });
+
+        // Marcar a los administradores existentes como verificados por defecto
+        \Illuminate\Support\Facades\DB::table('usuarios')
+            ->whereIn('rol_id', [1, 2])
+            ->update(['email_verified_at' => now()]);
     }
 
     /**

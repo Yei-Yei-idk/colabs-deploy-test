@@ -1,80 +1,118 @@
 @extends('layouts.cliente')
 
-@section('title', 'Mi Perfil - COLABS')
+@section('title', 'Dashboard de Perfil — Co-Labs')
 
 @section('content')
-<section id="mi-perfil" class="section active">
-    <h1 class="Titulo_perfil">Mi Perfil</h1>
-
-    @if(session('success'))
-        <div class="alert alert-success perfil-form-container">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if($errors->any())
-        <div class="alert alert-error perfil-form-container">
-            <ul class="m-0 pl-20">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <div class="perfil-container">
-        <div class="perfil-left">
-            <div class="{{ $usuario->avatar_color ?? auth()->user()->avatar_color ?? 'blue' }}" style="width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 4rem; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
-                {{ $usuario->avatar_initial ?? auth()->user()->avatar_initial ?? 'U' }}
+<section id="perfil-dashboard" class="zero-scroll-container animate-fade-in">
+    
+    <!-- ═══ DASHBOARD MAESTRO ═══ -->
+    <div class="dash-perfil-wrapper">
+        
+        <!-- BARRA IZQUIERDA: Identidad y Estado -->
+        <div class="dash-sidebar">
+            <div class="user-id-card">
+                <div class="avatar-dash {{ $usuario->avatar_color ?? 'blue' }}">
+                    {{ $usuario->avatar_initial ?? 'U' }}
+                    <span class="badge-status-dot {{ $usuario->email_verified_at ? 'verified' : 'pending' }}"></span>
+                </div>
+                <h2>{{ $usuario->user_nombre }}</h2>
+                <div class="id-tag">Miembro de Co•Labs</div>
+                
+                @if(!$usuario->email_verified_at)
+                    <div class="alert-verification-warning">
+                        <span>⚠️ Cuenta no verificada</span>
+                        <p>Por favor confirma tu correo o corrígelo en el formulario.</p>
+                    </div>
+                @endif
             </div>
-            <h3>{{ $usuario->first_name ?? $usuario->name ?? 'Usuario' }}</h3>
-            <p class="correo">{{ $usuario->user_correo ?? $usuario->email ?? '' }}</p>
 
+            <div class="dash-stats">
+                <div class="stat-bubble">
+                    <span class="count">{{ count($usuario->reservas ?? []) }}</span>
+                    <span class="label">Reservas</span>
+                </div>
+                <div class="stat-bubble">
+                    <span class="count">★</span>
+                    <span class="label">Activo</span>
+                </div>
+            </div>
         </div>
 
-        <div class="perfil-right">
-            <form id="formPerfil" method="POST" action="{{ route('cliente.perfil.actualizar') }}">
+        <!-- CONTENIDO PRINCIPAL: Información Expandida (Sin Scroll) -->
+        <div class="dash-main-content">
+            
+            @if(session('success'))
+                <div class="dash-alert success animate-slide-in">
+                    <span class="icon">✅</span> {{ session('success') }}
+                </div>
+            @endif
+
+            <form id="formPerfil" method="POST" action="{{ route('cliente.perfil.actualizar') }}" class="dash-form">
                 @csrf
-                <div class="bloque">
-                    <h3>Información Personal</h3>
-                    <button type="button" class="editar-bloque">✏ Editar</button>
+                
+                <div class="dash-sections-grid">
                     
-                    <div class="campo">
-                        <label for="nombre">Nombre Completo</label>
-                        <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" value="{{ $usuario->user_nombre ?? $usuario->name ?? '' }}" disabled required>
+                    <!-- Bloque: Contacto -->
+                    <div class="dash-card-section">
+                        <div class="section-title">
+                            <span class="icon">👤</span>
+                            <h3>Datos de Contacto</h3>
+                        </div>
+                        
+                        <div class="form-row-dash">
+                            <div class="field-dash">
+                                <label for="nombre">Nombre Completo</label>
+                                <input type="text" id="nombre" name="nombre" value="{{ $usuario->user_nombre }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row-dash multi-col">
+                            <div class="field-dash">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" id="email" name="email" value="{{ $usuario->user_correo }}" required>
+                            </div>
+                            <div class="field-dash">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" name="telefono" value="{{ $usuario->user_telefono }}" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="campo">
-                        <label for="email">Correo Electrónico</label>
-                        <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" value="{{ $usuario->user_correo ?? $usuario->email ?? '' }}" disabled required>
+
+                    <!-- Bloque: Seguridad -->
+                    <div class="dash-card-section security">
+                        <div class="section-title">
+                            <span class="icon">🔒</span>
+                            <h3>Seguridad</h3>
+                        </div>
+                        
+                        <div class="form-row-dash multi-col">
+                            <div class="field-dash">
+                                <label for="password">Contraseña Actual</label>
+                                <input type="password" id="password" name="password" placeholder="••••••••">
+                            </div>
+                            <div class="field-dash">
+                                <label for="newpassword">Nueva Contraseña</label>
+                                <input type="password" id="newpassword" name="newpassword" placeholder="••••••••">
+                            </div>
+                        </div>
+                        <div class="security-note">
+                            Cambia tu contraseña periódicamente para mantener tu cuenta segura.
+                        </div>
                     </div>
-                    <div class="campo">
-                        <label for="telefono">Teléfono</label>
-                        <input type="tel" id="telefono" name="telefono" placeholder="+57 300 000 0000" value="{{ $usuario->user_telefono ?? '' }}" disabled required>
-                    </div>
-                    
-                    <button type="submit" class="btn-guardar w-full mt-15">Guardar Cambios</button>
+
                 </div>
 
-                <div class="bloque">
-                    <h3>Seguridad</h3>
-                    <div class="campo">
-                        <label for="password">Contraseña Actual</label>
-                        <input type="password" id="password" name="password" placeholder="********" disabled>
-                    </div>
-                    <div class="campo">
-                        <label for="newpassword">Nueva Contraseña</label>
-                        <input type="password" id="newpassword" name="newpassword" placeholder="********" disabled>
-                    </div>
-                    <div class="campo">
-                        <label for="confirmpassword">Confirmar Contraseña</label>
-                        <input type="password" id="confirmpassword" name="confirmpassword" placeholder="********" disabled>
-                    </div>
+                <!-- Footer de Acciones (Fijo abajo en el dash) -->
+                <div class="dash-form-actions">
+                    <button type="submit" class="btn-save-dash btn-guardar">
+                        Guardar Cambios del Perfil
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-</section>
 
+</section>
 @endsection
 
 @section('scripts')

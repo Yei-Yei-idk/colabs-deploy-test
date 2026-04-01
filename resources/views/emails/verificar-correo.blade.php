@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifica tu correo</title>
+    <title>Verifica tu correo — Co-Labs</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     </style>
@@ -14,16 +14,16 @@
         <tr>
             <td align="center">
 
-                <!-- Main Card -->
-                <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.1);">
+                <!-- Main Card (Expansive 680px) -->
+                <table role="presentation" width="680" cellpadding="0" cellspacing="0" style="width:100%; max-width:680px; background-color:#ffffff; border-radius:24px; overflow:hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.08);">
 
-                    <!-- ═══ Header: Black bar + Logo ═══ -->
+                    <!-- ═══ Header ═══ -->
                     <tr>
-                        <td style="background:#000000; padding:28px 32px; text-align:center;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                        <td style="background:#000000; padding:32px 40px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
-                                    <td style="vertical-align:middle; text-align:center;">
-                                        <img src="{{ $message->embed(public_path('ASSETS/logo.png')) }}" alt="Colabs Logo" height="36" style="display:block; margin:0 auto; max-width:100%; border:none;" />
+                                    <td align="center">
+                                        <img src="{{ $message->embed(public_path('ASSETS/logo.png')) }}" alt="Colabs Logo" height="36" style="display:block; border:none;" />
                                     </td>
                                 </tr>
                             </table>
@@ -32,79 +32,63 @@
 
                     <!-- ═══ Yellow accent line ═══ -->
                     <tr>
-                        <td style="background: linear-gradient(90deg, #facc15, #eab308); height:4px; font-size:0; line-height:0;">&nbsp;</td>
+                        <td style="background: linear-gradient(90deg, #facc15, #eab308); height:6px; font-size:0; line-height:0;">&nbsp;</td>
                     </tr>
 
-                    <!-- ═══ Body ═══ -->
+                    <!-- ═══ Body (Expansive Hero) ═══ -->
                     <tr>
-                        <td style="padding:36px 32px 16px;">
-
+                        <td style="padding:56px 60px 40px; text-align:center;">
+                            
                             <!-- Icon -->
-                            <div style="text-align:center; margin-bottom:20px;">
-                                <div style="width:56px; height:56px; border-radius:50%; background:rgba(250,204,21,0.12); display:inline-block; text-align:center; line-height:56px; font-size:26px;">✉️</div>
+                            <div style="width:64px; height:64px; border-radius:16px; background:rgba(250,204,21,0.15); display:inline-block; text-align:center; line-height:64px; font-size:28px; margin-bottom:24px;">
+                                📩
                             </div>
 
                             <!-- Title -->
-                            <h2 style="margin:0 0 8px; color:#111827; font-size:22px; font-weight:800; text-align:center; letter-spacing:-0.3px;">
-                                ¡Casi listo!
-                            </h2>
+                            <h1 style="margin:0 0 16px; color:#111827; font-size:32px; font-weight:800; letter-spacing:-1px; line-height:1.1;">
+                                Verifica tu cuenta
+                            </h1>
 
-                            <p style="color:#6b7280; font-size:14px; line-height:1.7; margin:0 0 28px; text-align:center;">
-                                Hola, <strong style="color:#111827;">{{ $user->user_nombre }}</strong>. Aseguremos que tienes acceso a tu correo. Por favor haz clic en el botón de abajo para verificar tu cuenta en <strong style="color:#111827;">Co-Labs</strong>.
+                            <!-- Message -->
+                            <p style="color:#4b5563; font-size:16px; line-height:1.7; margin:0 0 40px; max-width:500px; margin-left:auto; margin-right:auto;">
+                                Hola, <strong style="color:#111827;">{{ $user->user_nombre }}</strong>. Estamos emocionados de tenerte en <span style="font-weight:700; color:#eab308;">Co•labs</span>. Solo falta este paso para asegurar tu acceso y proteger tu cuenta.
                             </p>
 
                             <!-- CTA Button -->
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
-                                    <td align="center" style="padding:0 0 28px;">
+                                    <td align="center" style="padding:0 0 24px;">
                                         <a href="{{ $url }}" 
-                                           style="display:inline-block; background:linear-gradient(90deg, #facc15, #eab308); color:#000000; text-decoration:none; padding:14px 40px; border-radius:999px; font-size:15px; font-weight:700; letter-spacing:0.2px; box-shadow: 0 10px 22px rgba(250,204,21,0.35);">
-                                            Verificar correo electrónico
+                                           style="display:inline-block; background:linear-gradient(90deg, #facc15, #eab308); color:#000000; text-decoration:none; padding:18px 48px; border-radius:12px; font-size:16px; font-weight:800; letter-spacing:0.5px; box-shadow: 0 12px 24px rgba(234,179,8,0.3);">
+                                            Confirmar correo electrónico
                                         </a>
                                     </td>
                                 </tr>
                             </table>
 
-                            <!-- Divider -->
-                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                            <!-- Simple Footer-Info -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #f1f5f9; padding-top:24px;">
                                 <tr>
-                                    <td style="border-top:1px solid #e5e7eb; padding-top:20px;">
-                                        
-                                        <!-- Info box -->
-                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb; border-radius:12px; border:1px solid #e5e7eb;">
-                                            <tr>
-                                                <td style="padding:16px 18px;">
-                                                    <p style="color:#9ca3af; font-size:12px; line-height:1.5; margin:0;">
-                                                        Si no creaste esta cuenta, simplemente ignora o elimina este mensaje.
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        </table>
-
+                                    <td align="center">
+                                        <p style="color:#94a3b8; font-size:12px; line-height:1.5; margin:0; max-width:400px;">
+                                            Si el botón no funciona, copia este enlace en tu navegador:<br>
+                                            <a href="{{ $url }}" style="color:#eab308; text-decoration:none;">{{ $url }}</a>
+                                        </p>
                                     </td>
                                 </tr>
                             </table>
-                        </td>
-                    </tr>
 
-                    <!-- ═══ Link fallback ═══ -->
-                    <tr>
-                        <td style="padding:0 32px 28px;">
-                            <p style="color:#9ca3af; font-size:11px; line-height:1.5; margin:0; word-break:break-all;">
-                                Si el botón no funciona, copia y pega este enlace:<br>
-                                <a href="{{ $url }}" style="color:#eab308;">{{ $url }}</a>
-                            </p>
                         </td>
                     </tr>
 
                     <!-- ═══ Footer ═══ -->
                     <tr>
-                        <td style="background:#000000; padding:20px 32px; text-align:center;">
-                            <p style="color:#6b7280; font-size:11px; margin:0 0 4px;">
-                                © {{ date('Y') }} <span style="color:#facc15; font-weight:700;">Co-Labs</span> · Todos los derechos reservados
+                        <td style="background:#000000; padding:32px 40px; text-align:center;">
+                            <p style="color:#64748b; font-size:12px; margin:0 0 8px;">
+                                © {{ date('Y') }} <span style="color:#facc15; font-weight:700;">Co•labs</span> Platform. Tu espacio de trabajo premium.
                             </p>
-                            <p style="color:#4b5563; font-size:10px; margin:0;">
-                                Acceso de seguridad verificado · Colabs Platform
+                            <p style="color:#475569; font-size:10px; margin:0; text-transform:uppercase; letter-spacing:1px;">
+                                Seguridad verificada · Colombia
                             </p>
                         </td>
                     </tr>

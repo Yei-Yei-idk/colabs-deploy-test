@@ -7,6 +7,7 @@ use App\Models\Espacio;
 use App\Models\Reserva;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+// use App\Notifications\ReservaStatusChanged; (Quitado: ahora se usa el Observer)
 
 class ReservasController extends Controller
 {
@@ -23,17 +24,21 @@ class ReservasController extends Controller
     {
         $ahora = Carbon::now(); // America/Bogota
 
-        Reserva::whereIn('rsva_estado', ['activa', 'Activa', 'aceptada', 'Aceptada'])
+        $vencidas = Reserva::whereIn('rsva_estado', ['activa', 'Activa', 'aceptada', 'Aceptada'])
             ->where(function ($q) use ($ahora) {
-                // Caso 1: la fecha de la reserva ya pasó (ayer o antes)
                 $q->whereDate('rsva_fecha', '<', $ahora->toDateString())
-                  // Caso 2: es hoy pero la hora de fin ya pasó
                   ->orWhere(function ($q2) use ($ahora) {
                       $q2->whereDate('rsva_fecha', $ahora->toDateString())
                          ->whereTime('rsva_hora_fin', '<=', $ahora->toTimeString());
                   });
             })
-            ->update(['rsva_estado' => 'finalizada']);
+            ->get();
+
+        foreach ($vencidas as $res) {
+            /** @var \App\Models\Reserva $res */
+            $res->rsva_estado = 'finalizada';
+            $res->save(); // El Observer disparará el correo de Finalizada
+        }
     }
 
     /**
@@ -124,7 +129,7 @@ class ReservasController extends Controller
 
         $reserva = Reserva::findOrFail($request->reserva_id);
         $reserva->rsva_estado = $request->nuevo_estado;
-        $reserva->save();
+        $reserva->save(); // El Observer disparará Aceptada/Rechazada
 
         return back()->with('success', "La reserva #{$reserva->reserva_id} ha sido {$request->nuevo_estado}.");
     }
@@ -181,7 +186,7 @@ class ReservasController extends Controller
     {
         $ahora = Carbon::now();
 
-        $actualizadas = Reserva::whereIn('rsva_estado', ['activa', 'Activa', 'aceptada', 'Aceptada', 'pendiente', 'Pendiente'])
+        $vencidas = Reserva::whereIn('rsva_estado', ['activa', 'Activa', 'aceptada', 'Aceptada', 'pendiente', 'Pendiente'])
             ->where(function ($q) use ($ahora) {
                 $q->whereDate('rsva_fecha', '<', $ahora->toDateString())
                   ->orWhere(function ($q2) use ($ahora) {
@@ -189,11 +194,17 @@ class ReservasController extends Controller
                          ->whereTime('rsva_hora_fin', '<=', $ahora->toTimeString());
                   });
             })
-            ->update(['rsva_estado' => 'finalizada']);
+            ->get();
+
+        foreach ($vencidas as $res) {
+            /** @var \App\Models\Reserva $res */
+            $res->rsva_estado = 'finalizada';
+            $res->save(); // El Observer disparará el correo
+        }
 
         return response()->json([
             'ok'           => true,
-            'actualizadas' => $actualizadas,
+            'actualizadas' => $vencidas->count(),
             'hora'         => $ahora->format('H:i:s'),
         ]);
     }
