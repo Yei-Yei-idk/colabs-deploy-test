@@ -11,8 +11,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const { precioHora, capacidadMaxima, espacioId, espacioNombre, csrfToken, verificarUrl, alternativasUrl, confirmarUrl } = config;
+    const {
+        precioHora,
+        capacidadMaxima,
+        espacioId,
+        espacioNombre,
+        csrfToken,
+        verificarUrl,
+        alternativasUrl,
+        confirmarUrl,
+        serverNowEpochMs,
+        serverTimezone
+    } = config;
     let currentGuests = 1;
+    const baseServerNowEpochMs = Number.isFinite(serverNowEpochMs) ? serverNowEpochMs : Date.now();
+    const baseClientEpochMs = Date.now();
 
     // Selectores del DOM
     const selectInicio = document.getElementById('hora_inicio');
@@ -33,17 +46,41 @@ document.addEventListener('DOMContentLoaded', () => {
         {value:"20:00",label:"08:00 PM"},{value:"21:00",label:"09:00 PM"},
     ];
 
+    function obtenerFechaHoraServidorBogota() {
+        const elapsedMs = Date.now() - baseClientEpochMs;
+        const nowMs = baseServerNowEpochMs + elapsedMs;
+        const formatter = new Intl.DateTimeFormat('en-US', {
+            timeZone: serverTimezone || 'America/Bogota',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            hour12: false
+        });
+
+        const parts = formatter.formatToParts(new Date(nowMs));
+        const map = {};
+        parts.forEach(({ type, value }) => {
+            map[type] = value;
+        });
+
+        return {
+            fecha: `${map.year}-${map.month}-${map.day}`,
+            hora: parseInt(map.hour, 10)
+        };
+    }
+
     /**
      * Filtra las horas si el usuario elige el día de hoy
      */
     function getHorasDisponibles() {
-        const hoy = new Date();
         const fechaSeleccionada = fechaInput.value;
-        const esHoy = fechaSeleccionada === hoy.toISOString().split('T')[0];
+        const ahoraServidor = obtenerFechaHoraServidorBogota();
+        const esHoy = fechaSeleccionada === ahoraServidor.fecha;
 
         if (!esHoy) return todasLasHoras;
 
-        const horaActual = hoy.getHours();
+        const horaActual = ahoraServidor.hora;
         return todasLasHoras.filter(h => {
             const horaNum = parseInt(h.value.split(':')[0]);
             return horaNum > horaActual;

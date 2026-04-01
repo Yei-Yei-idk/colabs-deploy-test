@@ -3,6 +3,10 @@
 @section('title', $espacio->esp_nombre . ' - Reservar')
 
 @section('content')
+    @php
+        $hoyBogota = \Carbon\Carbon::now('America/Bogota')->format('Y-m-d');
+        $serverNowEpochMs = \Carbon\Carbon::now('America/Bogota')->getTimestampMs();
+    @endphp
     <!-- SECCIÓN RESERVAR AHORA -->
     <div class="continer">
         <div class="reservar-container">
@@ -92,7 +96,7 @@
                             <label class="form-label">Selecciona la fecha</label>
                             <div class="date-input-container">
                                 <input type="date" id="fecha" name="fecha" class="form-input"
-                                    min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" required>
+                                    min="{{ $hoyBogota }}" value="{{ $hoyBogota }}" required>
                                 <span class="calendar-icon">📅</span>
                             </div>
                         </div>
@@ -264,18 +268,22 @@
          data-verificar-url="{{ route('cliente.verificar_disponibilidad') }}"
          data-alternativas-url="{{ route('cliente.alternativas') }}"
          data-confirmar-url="{{ route('cliente.confirmar_reserva') }}"
+         data-server-now-epoch-ms="{{ $serverNowEpochMs }}"
+         data-server-timezone="America/Bogota"
          style="display:none;"></div>
     <script>
         const configElement = document.getElementById('reservaConfigData');
         window.reservaConfig = {
             precioHora: parseFloat(configElement.getAttribute('data-precio-hora')),
-            capacidadMaxima: parseInt(configElement.getAttribute('data-capacidad')),
-            espacioId: parseInt(configElement.getAttribute('data-espacio-id')),
+            capacidadMaxima: parseInt(configElement.getAttribute('data-capacidad'), 10),
+            espacioId: parseInt(configElement.getAttribute('data-espacio-id'), 10),
             espacioNombre: configElement.getAttribute('data-espacio-nombre'),
             csrfToken: configElement.getAttribute('data-csrf'),
             verificarUrl: configElement.getAttribute('data-verificar-url'),
             alternativasUrl: configElement.getAttribute('data-alternativas-url'),
-            confirmarUrl: configElement.getAttribute('data-confirmar-url')
+            confirmarUrl: configElement.getAttribute('data-confirmar-url'),
+            serverNowEpochMs: parseInt(configElement.getAttribute('data-server-now-epoch-ms'), 10),
+            serverTimezone: configElement.getAttribute('data-server-timezone') || 'America/Bogota'
         };
     </script>
     <script src="{{ asset('js/cliente/reserva.js?v=' . time()) }}"></script>
