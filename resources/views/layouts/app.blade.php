@@ -83,6 +83,9 @@
 
     <script src="{{ asset('js/global.js') }}"></script>
 
+    {{-- Menú hamburguesa --}}
+    <script src="{{ asset('js/menu_hamburguesa.js') }}"></script>
+
     @stack('scripts')
 </body>
 </html>
